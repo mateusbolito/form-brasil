@@ -40,7 +40,7 @@ export default function OptionsPainel({ ...props }) {
               </h2>
             </CardTitle>
           </CardHeader>
-          <CardContent className="   items-center justify-center block">
+          <CardContent className=" flex flex-col flex-grow items-center justify-center">
             <div className="flex items-center justify-center">
               <Image
                 src="/lock-open.svg"
@@ -51,13 +51,13 @@ export default function OptionsPainel({ ...props }) {
               ></Image>
             </div>
 
-            <CardDescription className="text-center">
-              <h2>
+            <CardDescription className="text-center mt-24">
+              <h2 className="">
                 Realizar o Registro dos<br></br> Lotes Carregados
               </h2>
             </CardDescription>
           </CardContent>
-          <CardFooter className="flex items-center justify-center">
+          <CardFooter className="flex items-center justify-center mt-auto">
             <Button className="w-[126px] h-[39px] bg-[#1D4D19] text-white cursor-pointer">
               ADICIONAR
             </Button>
