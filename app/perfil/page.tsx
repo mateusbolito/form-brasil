@@ -1,0 +1,35 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import Link from "next/link"; // Importe o Link do Next.js
+
+export default function Perfil() {
+  return (
+    <main className="block items-center justify-center mt-6">
+      <h1 className="font-bold text-4xl text-[#1D4D19] flex items-center justify-center">
+        Meu Perfil
+      </h1>
+
+      <div className="flex items-center justify-center ">
+        <Avatar className="w-[96px] h-[96px] mt-7 ">
+          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarFallback>CN</AvatarFallback>
+        </Avatar>
+      </div>
+      <p className="flex items-center justify-center mt-3">
+        <strong>Olá, Admin</strong>
+      </p>
+      <p className="flex items-center justify-center text-xs">
+        cpd@raftembalagens.com.br
+      </p>
+
+      <div className="flex items-center justify-center">
+        {/* Usando Link para navegação */}
+        <Link href="/senha">
+          <Button className="bg-[#1D4D19] text-white mt-6 cursor-pointer">
+            Mudar Senha
+          </Button>
+        </Link>
+      </div>
+    </main>
+  );
+}
