@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import Painel from "./components/Painel";
+import OptionsPainel from "./components/Options";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,6 +32,9 @@ export default function RootLayout({
       >
         <Header />
         <Painel />
+        <main className="flex">
+          <OptionsPainel />
+        </main>
 
         {children}
       </body>
