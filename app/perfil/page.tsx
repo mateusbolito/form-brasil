@@ -25,7 +25,7 @@ export default function Perfil() {
       <div className="flex items-center justify-center">
         {/* Usando Link para navegação */}
         <Link href="/senha">
-          <Button className="bg-[#1D4D19] text-white mt-6 cursor-pointer">
+          <Button className="bg-[#1D4D19] text-white font-bold mt-6 cursor-pointer rounded-[2px] ">
             Mudar Senha
           </Button>
         </Link>

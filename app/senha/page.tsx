@@ -13,7 +13,7 @@ export default function Senha() {
       </div>
 
       <div className="flex items-center justify-start sm:justify-center pl-4 mt-10">
-        <p className="text-xs w-full sm:w-96 max-sm:max-w-80">
+        <p className="text-xs w-full sm:w-96 max-sm:max-w-80 text-[#333] ">
           Insira seu endereço de e-mail ou nome de usuário. Você receberá um
           link para criar uma nova senha por e-mail.
         </p>
@@ -27,7 +27,7 @@ export default function Senha() {
 
           <Input type="email" className=" sm:w-[400px] mt-1 max-sm:max-w-96" />
 
-          <Button className="bg-[#1D4D19] text-white mt-4 w-full sm:w-auto max-sm:max-w-32 cursor-pointer">
+          <Button className="bg-[#1D4D19] text-white font-bold mt-4 w-full sm:w-auto max-sm:max-w-32 cursor-pointer rounded-[2px] ">
             Mudar Senha
           </Button>
         </form>

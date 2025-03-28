@@ -54,7 +54,7 @@ export default function OptionsPainel({ ...props }) {
             <CardFooter className="flex items-center justify-center mt-auto">
               <Link href="/busca">
                 <Button
-                  className="w-[126px] h-[39px] bg-[#1D4D19] text-white cursor-pointer"
+                  className="w-[126px] h-[39px] bg-[#1D4D19] text-white cursor-pointer font-bold rounded-[2px] "
                   disabled={isDisabled}
                 >
                   ADICIONAR
