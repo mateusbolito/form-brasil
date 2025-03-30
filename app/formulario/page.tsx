@@ -215,19 +215,23 @@ export default function FormularioCarregamento() {
         </table>
       </div>
 
-      <div className="flex justify-start gap-[5px] mt-[15px]">
-        <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-          <Save size={18} /> SALVAR
-        </Button>
-        <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-          <Keyboard size={18} /> DIGITAR
-        </Button>
-        <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-          <Barcode size={18} /> CARREGAR
-        </Button>
-        <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-          <X size={18} /> ENCERRAR
-        </Button>
+      <div className="flex flex-col gap-4 mt-6">
+        <div className="flex justify-start gap-[5px]">
+          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+            <Save size={18} /> SALVAR
+          </Button>
+          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+            <Keyboard size={18} /> DIGITAR
+          </Button>
+          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+            <Barcode size={18} /> CARREGAR
+          </Button>
+        </div>
+        <div className="flex justify-start mt-4">
+          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+            <X size={18} /> ENCERRAR
+          </Button>
+        </div>
       </div>
     </div>
   );
