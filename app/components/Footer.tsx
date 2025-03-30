@@ -17,9 +17,7 @@ export default function Footer() {
 
   return (
     <>
-      {/* Footer */}
       <footer className="fixed bottom-0 w-full bg-[#d4decf] h-20 flex items-center justify-around md:hidden">
-        {/* Abre o modal ao clicar na lupa */}
         <button onClick={() => setOpen(true)}>
           <Search className="w-8 h-8 text-[#1D4D19] cursor-pointer" />
         </button>
@@ -33,7 +31,6 @@ export default function Footer() {
         </Link>
       </footer>
 
-      {/* Modal de Pesquisa */}
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="w-[90%] sm:w-[400px] bg-white p-6 rounded-lg">
           <DialogHeader className="flex justify-between items-center">
@@ -45,7 +42,6 @@ export default function Footer() {
             </button>
           </DialogHeader>
 
-          {/* Input de pesquisa */}
           <div className="relative">
             <Input
               type="text"

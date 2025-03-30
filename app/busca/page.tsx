@@ -14,7 +14,6 @@ export default function BuscaPvOp() {
       </h4>
 
       <main className="flex flex-col sm:flex-row sm:gap-3 w-full justify-center">
-        {/* Ordem de Produção */}
         <div className="flex flex-col items-center sm:items-start w-full sm:w-[300px]">
           <label
             htmlFor="ordem"
@@ -26,8 +25,9 @@ export default function BuscaPvOp() {
             <Input
               type="email"
               placeholder="Op"
-              className="w-full sm:w-[200px] mt-1" // Responsivo: largura controlada
+              className="w-full sm:w-[200px] mt-1"
             />
+
             <Button className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer">
               <FaBarcode />
             </Button>
@@ -37,7 +37,6 @@ export default function BuscaPvOp() {
           </div>
         </div>
 
-        {/* Pedido de Venda */}
         <div className="flex flex-col items-center sm:items-start w-full sm:w-[300px] mt-4 sm:mt-0">
           <label htmlFor="pedido" className="flex">
             Pedido de Venda
@@ -46,7 +45,7 @@ export default function BuscaPvOp() {
             <Input
               type="email"
               placeholder="Pv"
-              className="w-full sm:w-[200px] mt-1" // Responsivo: largura controlada
+              className="w-full sm:w-[200px] mt-1"
             />
             <Button className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer">
               <FaBarcode />
