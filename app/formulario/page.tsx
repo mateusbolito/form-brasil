@@ -11,17 +11,18 @@ export default function FormularioCarregamento() {
       <span className="border-t-2 flex border-t-gray-100"></span>
 
       <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Ordem de Produção
           </label>
           <Input
             type="text"
-            className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
+            className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200  "
             placeholder="Digite ou escaneie"
+            disabled
           />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Pedido de Venda
           </label>
@@ -29,12 +30,13 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite ou escaneie"
+            disabled
           />
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Código FE
           </label>
@@ -42,9 +44,10 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o código FE"
+            disabled
           />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Descrição
           </label>
@@ -52,21 +55,23 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite a descrição"
+            disabled
           />
         </div>
       </div>
 
-      <div className="w-full">
+      <div className="w-full cursor-not-allowed">
         <label className="block text-sm font-medium text-left">Cliente</label>
         <Input
           type="text"
           className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
           placeholder="Digite o nome do cliente"
+          disabled
         />
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Nota Fiscal
           </label>
@@ -74,9 +79,10 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o número da nota fiscal"
+            disabled
           />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Qtd. Pedido de Venda
           </label>
@@ -84,12 +90,13 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Quantidade de pedido"
+            disabled
           />
         </div>
       </div>
 
       <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Data de Entrega
           </label>
@@ -97,9 +104,10 @@ export default function FormularioCarregamento() {
             type="date"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o código FE"
+            disabled
           />
         </div>
-        <div className="w-full md:w-1/2">
+        <div className="w-full md:w-1/2 cursor-not-allowed">
           <label className="block text-sm font-medium text-left">
             Local Entrega
           </label>
@@ -107,6 +115,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Local de entrega"
+            disabled
           />
         </div>
       </div>
@@ -116,8 +125,9 @@ export default function FormularioCarregamento() {
           Observações
         </label>
         <textarea
-          className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
+          className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 cursor-not-allowed"
           placeholder="Observações adicionais"
+          disabled
           rows={4}
         />
       </div>

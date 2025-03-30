@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaBarcode, FaSearch } from "react-icons/fa";
-
+import Link from "next/link";
 export default function BuscaPvOp() {
   return (
     <div className="flex flex-col items-center justify-center text-center space-y-4 mt-5">
@@ -32,7 +32,9 @@ export default function BuscaPvOp() {
               <FaBarcode />
             </Button>
             <Button className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer">
-              <FaSearch />
+              <Link href="/formulario">
+                <FaSearch />
+              </Link>
             </Button>
           </div>
         </div>
