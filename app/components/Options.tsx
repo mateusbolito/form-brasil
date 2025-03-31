@@ -64,12 +64,12 @@ export default function OptionsPainel({ ...props }) {
           <ChevronLeft className="w-6 h-6 text-[#1D4D19]" />
         </button>
 
-        <div ref={emblaRef} className="overflow-hidden w-60">
+        <div ref={emblaRef} className="overflow-hidden w-72">
           <div className="flex">
             {notifications.map((notification, index) => {
               const isDisabled = index !== 0;
               return (
-                <div key={index} className="flex-none w-60">
+                <div key={index} className="flex-none w-72  ">
                   <Card
                     className={cn(
                       `w-full  bg-[#F1F1F1] border-0 h-[300px] `,
