@@ -15,17 +15,14 @@ export default function BuscaPvOp() {
 
       <main className="flex flex-col sm:flex-row sm:gap-3 w-full justify-center">
         <div className="flex flex-col items-center sm:items-start w-full sm:w-[300px]">
-          <label
-            htmlFor="ordem"
-            className="flex text-left sm:text-left sm:w-auto"
-          >
+          <label htmlFor="ordem" className="w-full text-left sm:ml-0 ml-16">
             Ordem de Produção
           </label>
           <div className="flex items-center justify-center sm:justify-start gap-1.5 w-full">
             <Input
               type="email"
               placeholder="Op"
-              className="w-full sm:w-[200px] mt-1"
+              className="w-[250px] sm:w-[350px] mt-1"
             />
 
             <Button className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer">
@@ -39,15 +36,15 @@ export default function BuscaPvOp() {
           </div>
         </div>
 
-        <div className="flex flex-col items-center sm:items-start w-full sm:w-[300px] mt-4 sm:mt-0">
-          <label htmlFor="pedido" className="flex">
+        <div className="flex flex-col items-center sm:items-start w-full sm:w-[300px]  mt-4 sm:mt-0">
+          <label htmlFor="pedido" className="w-full text-left sm:ml-0 ml-16">
             Pedido de Venda
           </label>
           <div className="flex items-center justify-center sm:justify-start gap-1.5 w-full">
             <Input
               type="email"
               placeholder="Pv"
-              className="w-full sm:w-[200px] mt-1"
+              className="w-[250px] sm:w-[350px] mt-1"
             />
             <Button className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer">
               <FaBarcode />

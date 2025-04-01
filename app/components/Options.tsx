@@ -120,7 +120,7 @@ export default function OptionsPainel({ ...props }) {
 
         <button
           onClick={scrollNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
+          className="absolute right-5 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
         >
           <ChevronRight className="w-6 h-6 text-[#1D4D19]" />
         </button>
