@@ -59,20 +59,20 @@ export default function OptionsPainel({ ...props }) {
       <div className="relative w-full sm:hidden flex flex-col items-center">
         <button
           onClick={scrollPrev}
-          className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
+          className="absolute left-0.5 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
         >
           <ChevronLeft className="w-6 h-6 text-[#1D4D19]" />
         </button>
 
-        <div ref={emblaRef} className="overflow-hidden w-72">
+        <div ref={emblaRef} className="overflow-hidden w-72 mr-5">
           <div className="flex">
             {notifications.map((notification, index) => {
               const isDisabled = index !== 0;
               return (
-                <div key={index} className="flex-none w-72  ">
+                <div key={index} className="flex-none w-72">
                   <Card
                     className={cn(
-                      `w-full  bg-[#F1F1F1] border-0 h-[300px] `,
+                      `w-full  bg-[#F1F1F1] border-0 h-[350px]`,
                       isDisabled && "opacity-50 pointer-events-none"
                     )}
                     {...props}
