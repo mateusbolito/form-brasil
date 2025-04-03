@@ -1,8 +1,33 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Barcode, Check, Keyboard, Save, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 export default function FormularioCarregamento() {
+  const [formData, setFormData] = useState({
+    ordem_producao: '',
+    pedido_venda: '',
+    codigo_fe: '',
+    descricao: '',
+    cliente: '',
+    nota_fiscal: '',
+    qtd_pedido_venda: '',
+    data_entrega: '',
+    local_entrega: '',
+    observacoes: ''
+  });
+
+  console.log(formData);
+
+  useEffect(() => {
+    const savedData = localStorage.getItem('formularioData');
+    if (savedData) {
+      const parsedData = JSON.parse(savedData);
+      setFormData(parsedData);
+    }
+  }, []);
+
   return (
     <div className="container mx-auto max-w-4xl p-6 min-h-screen pb-28">
       <h2 className="flex text-3xl font-bold mb-4 mt-7">
@@ -17,8 +42,9 @@ export default function FormularioCarregamento() {
           </label>
           <Input
             type="text"
-            className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200  "
+            className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite ou escaneie"
+            value={formData.ordem_producao}
             disabled
           />
         </div>
@@ -30,6 +56,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite ou escaneie"
+            value={formData.pedido_venda}
             disabled
           />
         </div>
@@ -44,6 +71,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o código FE"
+            value={formData.codigo_fe}
             disabled
           />
         </div>
@@ -55,6 +83,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite a descrição"
+            value={formData.descricao}
             disabled
           />
         </div>
@@ -66,6 +95,7 @@ export default function FormularioCarregamento() {
           type="text"
           className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
           placeholder="Digite o nome do cliente"
+          value={formData.cliente}
           disabled
         />
       </div>
@@ -79,6 +109,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o número da nota fiscal"
+            value={formData.nota_fiscal}
             disabled
           />
         </div>
@@ -90,6 +121,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Quantidade de pedido"
+            value={formData.qtd_pedido_venda}
             disabled
           />
         </div>
@@ -104,6 +136,7 @@ export default function FormularioCarregamento() {
             type="date"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o código FE"
+            value={formData.data_entrega}
             disabled
           />
         </div>
@@ -115,6 +148,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Local de entrega"
+            value={formData.local_entrega}
             disabled
           />
         </div>
@@ -127,6 +161,7 @@ export default function FormularioCarregamento() {
         <textarea
           className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 cursor-not-allowed"
           placeholder="Observações adicionais"
+          value={formData.observacoes}
           disabled
           rows={4}
         />
