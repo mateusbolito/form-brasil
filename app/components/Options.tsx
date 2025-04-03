@@ -56,7 +56,7 @@ export default function OptionsPainel({ ...props }) {
 
   return (
     <>
-      <div className="relative w-full sm:hidden flex flex-col items-center">
+      <div className="relative w-full sm:flex flex flex-col items-center lg:hidden">
         <button
           onClick={scrollPrev}
           className="absolute left-0.5 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow-md"
@@ -138,7 +138,7 @@ export default function OptionsPainel({ ...props }) {
       </div>
 
       {/* Grid para Desktop */}
-      <div className="hidden sm:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="hidden lg:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {notifications.map((notification, index) => {
           const isDisabled = index !== 0;
 

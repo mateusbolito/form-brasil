@@ -1,15 +1,23 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { IOrderData } from '@/types/get-order';
-import { Barcode, Check, Keyboard, Save, X } from "lucide-react";
+import { IOrderData } from "@/types/get-order";
+import {
+  Barcode,
+  Check,
+  Keyboard,
+  Save,
+  X,
+  ArrowLeftCircle,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-
+import { useRouter } from "next/navigation";
 export default function FormularioCarregamento() {
   const [formData, setFormData] = useState<IOrderData>();
+  const router = useRouter();
 
   useEffect(() => {
-    const savedData = localStorage.getItem('formularioData');
+    const savedData = localStorage.getItem("formularioData");
     if (savedData) {
       const parsedData = JSON.parse(savedData);
       setFormData(parsedData);
@@ -21,6 +29,9 @@ export default function FormularioCarregamento() {
       <h2 className="flex text-3xl font-bold mb-4 mt-7">
         Formulário de Carregamento
       </h2>
+      <button onClick={() => router.back()} className="cursor-pointer ">
+        <ArrowLeftCircle />
+      </button>
       <span className="border-t-2 flex border-t-gray-100"></span>
 
       <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
@@ -213,7 +224,7 @@ export default function FormularioCarregamento() {
         />
       </div>
       <div className="flex justify-end mt-6">
-        <Button className="flex items-center gap-2 px-6 py-3 font-bold w-[148px] h-[35px] border-2 border-[#198754] text-[#198754] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+        <Button className=" cursor-pointer flex items-center gap-2 px-6 py-3 font-bold w-[148px] h-[35px] border-2 border-[#198754] text-[#198754] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
           <Check size={18} /> SOLICITAR NFE
         </Button>
       </div>
@@ -251,10 +262,18 @@ export default function FormularioCarregamento() {
           </Button>
         </div>
         <div className="flex justify-start mt-4">
-          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden">
             <X size={18} /> ENCERRAR
           </Button>
         </div>
+      </div>
+      <div className="flex items-center  justify-center mt-3">
+        <Button
+          onClick={() => window.print()}
+          className="bg-[#1D4D19] text-white cursor-pointer w-2xs font-bold print:hidden"
+        >
+          Imprimir PDF
+        </Button>
       </div>
     </div>
   );

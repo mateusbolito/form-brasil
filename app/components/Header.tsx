@@ -14,7 +14,7 @@ import Link from "next/link";
 export default function Header() {
   return (
     <main>
-      <header className="bg-[#d4decf] h-32 md:h-52 ">
+      <header className="bg-[#d4decf] h-32 md:h-52 print:hidden">
         <div className="flex items-center justify-between px-6 md:px-12 py-6 md:py-16">
           <Link href="/">
             <Image
