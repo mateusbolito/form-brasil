@@ -1,24 +1,12 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { IOrderData } from '@/types/get-order';
 import { Barcode, Check, Keyboard, Save, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function FormularioCarregamento() {
-  const [formData, setFormData] = useState({
-    ordem_producao: '',
-    pedido_venda: '',
-    codigo_fe: '',
-    descricao: '',
-    cliente: '',
-    nota_fiscal: '',
-    qtd_pedido_venda: '',
-    data_entrega: '',
-    local_entrega: '',
-    observacoes: ''
-  });
-
-  console.log(formData);
+  const [formData, setFormData] = useState<IOrderData>();
 
   useEffect(() => {
     const savedData = localStorage.getItem('formularioData');
@@ -44,7 +32,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite ou escaneie"
-            value={formData.ordem_producao}
+            value={formData?.items[0]?.ZQ_ORDEM}
             disabled
           />
         </div>
@@ -56,7 +44,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite ou escaneie"
-            value={formData.pedido_venda}
+            value={formData?.items[0]?.ZQ_PEDIDO}
             disabled
           />
         </div>
@@ -71,7 +59,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o código FE"
-            value={formData.codigo_fe}
+            value={formData?.items[0]?.ZQ_CODFE}
             disabled
           />
         </div>
@@ -83,7 +71,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite a descrição"
-            value={formData.descricao}
+            value={formData?.items[0]?.ZQ_OBS}
             disabled
           />
         </div>
@@ -95,7 +83,7 @@ export default function FormularioCarregamento() {
           type="text"
           className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
           placeholder="Digite o nome do cliente"
-          value={formData.cliente}
+          value={formData?.items[0]?.ZQ_CLIENTE}
           disabled
         />
       </div>
@@ -109,7 +97,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o número da nota fiscal"
-            value={formData.nota_fiscal}
+            value={formData?.items[0]?.ZQ_NF}
             disabled
           />
         </div>
@@ -121,7 +109,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Quantidade de pedido"
-            value={formData.qtd_pedido_venda}
+            value={formData?.items[0]?.ZQ_QTDE}
             disabled
           />
         </div>
@@ -136,7 +124,7 @@ export default function FormularioCarregamento() {
             type="date"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o código FE"
-            value={formData.data_entrega}
+            value={formData?.items[0]?.ZQ_DTENTR}
             disabled
           />
         </div>
@@ -148,7 +136,7 @@ export default function FormularioCarregamento() {
             type="text"
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Local de entrega"
-            value={formData.local_entrega}
+            value={formData?.items[0]?.ZQ_LOCENT}
             disabled
           />
         </div>
@@ -161,7 +149,7 @@ export default function FormularioCarregamento() {
         <textarea
           className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 cursor-not-allowed"
           placeholder="Observações adicionais"
-          value={formData.observacoes}
+          value={formData?.items[0]?.ZQ_OBS}
           disabled
           rows={4}
         />
