@@ -5,15 +5,29 @@ import { IOrderData } from "@/types/get-order";
 import {
   Barcode,
   Check,
-  Keyboard,
   Save,
   X,
   ArrowLeftCircle,
+  Trash,
+  Pencil,
+  Keyboard,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 export default function FormularioCarregamento() {
+  const [loteInput, setLoteInput] = useState("");
+  const [lotes, setLotes] = useState<{ seq: number; lote: string }[]>([]);
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState<IOrderData>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -24,6 +38,32 @@ export default function FormularioCarregamento() {
     }
   }, []);
 
+  const handleSaveLote = () => {
+    if (!loteInput.trim()) return;
+
+    if (editingIndex !== null) {
+      const updatedLotes = [...lotes];
+      updatedLotes[editingIndex].lote = loteInput;
+      setLotes(updatedLotes);
+      setEditingIndex(null);
+    } else {
+      setLotes([...lotes, { seq: lotes.length + 1, lote: loteInput }]);
+    }
+
+    setLoteInput("");
+    setIsModalOpen(false);
+  };
+
+  const handleEditLote = (index: number) => {
+    setLoteInput(lotes[index].lote);
+    setEditingIndex(index);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteLote = (index: number) => {
+    const updatedLotes = lotes.filter((_, i) => i !== index);
+    setLotes(updatedLotes);
+  };
   return (
     <div className="container mx-auto max-w-4xl p-6 min-h-screen pb-28">
       <h2 className="flex text-3xl font-bold mb-4 mt-7">
@@ -232,7 +272,7 @@ export default function FormularioCarregamento() {
       <h2 className="flex text-3xl font-bold mb-4 mt-7">CARREGAMENTO </h2>
 
       <div className="w-full mt-4">
-        <table className="w-full border-collapse border border-gray-200">
+        <table className="w-full border-collapse border border-gray-200 mt-4">
           <thead>
             <tr className="bg-gray-100">
               <th className="border border-gray-300 px-4 py-2 text-left">
@@ -246,23 +286,99 @@ export default function FormularioCarregamento() {
               </th>
             </tr>
           </thead>
+          <tbody>
+            {lotes.map((item, index) => (
+              <tr key={index} className="border border-gray-300">
+                <td className="border px-4 py-2">{item.seq}</td>
+                <td className="border px-4 py-2">{item.lote}</td>
+                <td className="border px-4 py-2 flex gap-2">
+                  <Button
+                    onClick={() => handleEditLote(index)}
+                    className="text-yellow-300 hover:bg-[#1D4D19] hover:text-yellow-400 cursor-pointer"
+                  >
+                    <Pencil size={16} />
+                  </Button>
+                  <Button
+                    onClick={() => handleDeleteLote(index)}
+                    className="text-red-600 hover:bg-[#1D4D19] cursor-pointer"
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex justify-start gap-[5px]">
-          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+          <Button
+            size={"large"}
+            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+          >
             <Save size={18} /> SALVAR
           </Button>
-          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-            <Keyboard size={18} /> DIGITAR
-          </Button>
-          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
+
+          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+            <DialogTrigger asChild>
+              <Button
+                size={"large"}
+                onClick={() => setIsModalOpen(true)}
+                className="rounded-xs flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19]  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+              >
+                <Keyboard size={18} />
+                DIGITAR
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="flex gap-1">
+                  <Keyboard size={18} />
+                  {editingIndex !== null ? "Editar" : "Digitar"} Lote
+                </DialogTitle>
+              </DialogHeader>
+              <p className="text-base">Número do Lote</p>
+              <Input
+                type="text"
+                placeholder="Digite o lote..."
+                value={loteInput}
+                onChange={(e) => setLoteInput(e.target.value)}
+                className="w-full border p-2 rounded border-gray-200"
+              />
+              <p className="text-xs">
+                Digite o número do lote no formato indicado
+              </p>
+              <div className="flex justify-end mt-4">
+                <Button className="bg-gray-400 text-white text-base cursor-pointer">
+                  <X size={18} />
+                  Cancelar
+                </Button>
+
+                <DialogClose>
+                  <Button
+                    onClick={handleSaveLote}
+                    className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
+                  >
+                    <Check size={18} />
+                    Confirmar
+                  </Button>
+                </DialogClose>
+              </div>
+            </DialogContent>
+          </Dialog>
+          <Button
+            size={"large"}
+            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+          >
             <Barcode size={18} /> CARREGAR
           </Button>
         </div>
         <div className="flex justify-start mt-4">
-          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden">
+          <Button
+            size={"large"}
+            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
+          >
             <X size={18} /> ENCERRAR
           </Button>
         </div>
