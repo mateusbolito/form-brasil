@@ -12,9 +12,18 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { postFormularioCarregamento } from "@/services/api/postFormularioCarregamento";
+
 export default function FormularioCarregamento() {
   const [formData, setFormData] = useState<IOrderData>();
   const router = useRouter();
+  const [dadosFaturamento, setDadosFaturamento] = useState({
+    quantidade: '',
+    placa: '',
+    transportadora: '',
+    localImpressao: '',
+    observacao: ''
+  });
 
   useEffect(() => {
     const savedData = localStorage.getItem("formularioData");
@@ -23,6 +32,36 @@ export default function FormularioCarregamento() {
       setFormData(parsedData);
     }
   }, []);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setDadosFaturamento(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const dadosParaEnviar = {
+        ZP_PEDIDO: formData?.items[0]?.ZQ_PEDIDO || '',
+        ZP_OP: formData?.items[0]?.ZQ_ORDEM || '',
+        ZP_DATA: new Date().toISOString().split('T')[0],
+        ZP_QTDECAR: Number(dadosFaturamento.quantidade),
+        ZP_PLACA: dadosFaturamento.placa,
+        ZP_TRANSP: dadosFaturamento.transportadora,
+        ZP_LOCIMP: dadosFaturamento.localImpressao,
+        ZP_OBS: dadosFaturamento.observacao,
+        ZP_LOTE: [] // Aqui você pode adicionar os lotes quando implementar essa funcionalidade
+      };
+
+      await postFormularioCarregamento(dadosParaEnviar);
+      alert('Formulário enviado com sucesso!');
+    } catch (error) {
+      console.error('Erro ao enviar formulário:', error);
+      alert('Erro ao enviar formulário');
+    }
+  };
 
   return (
     <div className="container mx-auto max-w-4xl p-6 min-h-screen pb-28">
@@ -172,12 +211,13 @@ export default function FormularioCarregamento() {
       <span className="border-t-2 flex border-t-gray-100"></span>
       <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
         <div className="w-full md:w-1/4">
-          <label className="block text-sm font-medium text-left">
-            Quantidade
-          </label>
+          <label className="block text-sm font-medium text-left">Quantidade</label>
           <Input
             type="number"
-            className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
+            name="quantidade"
+            value={dadosFaturamento.quantidade}
+            onChange={handleInputChange}
+            className="w-full border p-2 rounded border-gray-200 mt-[15px]"
             placeholder="Digite a quantidade"
           />
         </div>
@@ -186,7 +226,10 @@ export default function FormularioCarregamento() {
           <label className="block text-sm font-medium text-left">Placa</label>
           <Input
             type="text"
-            className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
+            name="placa"
+            value={dadosFaturamento.placa}
+            onChange={handleInputChange}
+            className="w-full border p-2 rounded border-gray-200 mt-[15px]"
             placeholder="Digite a placa"
           />
         </div>
@@ -197,6 +240,9 @@ export default function FormularioCarregamento() {
           </label>
           <Input
             type="text"
+            name="transportadora"
+            value={dadosFaturamento.transportadora}
+            onChange={handleInputChange}
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Nome da transportadora"
           />
@@ -208,6 +254,9 @@ export default function FormularioCarregamento() {
           </label>
           <Input
             type="text"
+            name="localImpressao"
+            value={dadosFaturamento.localImpressao}
+            onChange={handleInputChange}
             className="w-full border p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
             placeholder="Digite o local"
           />
@@ -219,13 +268,19 @@ export default function FormularioCarregamento() {
         </label>
         <textarea
           className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200"
+          name="observacao"
+          value={dadosFaturamento.observacao}
+          onChange={handleInputChange}
           placeholder="Observações sobre o faturamento"
           rows={4}
         />
       </div>
       <div className="flex justify-end mt-6">
-        <Button className=" cursor-pointer flex items-center gap-2 px-6 py-3 font-bold w-[148px] h-[35px] border-2 border-[#198754] text-[#198754] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-          <Check size={18} /> SOLICITAR NFE
+        <Button 
+          onClick={handleSubmit}
+          className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+        >
+          <Save size={18} /> SALVAR
         </Button>
       </div>
 
@@ -251,9 +306,6 @@ export default function FormularioCarregamento() {
 
       <div className="flex flex-col gap-4 mt-6">
         <div className="flex justify-start gap-[5px]">
-          <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
-            <Save size={18} /> SALVAR
-          </Button>
           <Button className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-md bg-white transition-all hover:bg-[#1D4D19] hover:text-white">
             <Keyboard size={18} /> DIGITAR
           </Button>
