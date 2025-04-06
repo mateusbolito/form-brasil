@@ -420,91 +420,95 @@ export default function FormularioCarregamento() {
 
       {!isEncerrado && (
         <div className="flex flex-col gap-4 mt-6">
-          <div className="flex justify-start gap-[5px]">
-            <Button
-              onClick={() => router.back()}
-              size={"large"}
-              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-            >
-              <ArrowLeftCircle size={18} /> VOLTAR
-            </Button>
+          <div className="flex flex-col md:flex-row md:items-center gap-2">
+            <div className="flex gap-2">
+              <Button
+                onClick={() => router.back()}
+                size={"large"}
+                className="md:w-auto flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+              >
+                <ArrowLeftCircle size={18} /> VOLTAR
+              </Button>
 
-            <Button
-              onClick={() => handleSubmit("E")}
-              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white h-9.5"
-            >
-              <Save size={18} /> SALVAR
-            </Button>
+              <Button
+                size={"large"}
+                onClick={() => handleSubmit("E")}
+                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+              >
+                <Save size={18} /> SALVAR
+              </Button>
 
-            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-              <DialogTrigger asChild>
-                <Button
-                  size={"large"}
-                  className="rounded-xs flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19]  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-                >
-                  <Keyboard size={18} />
-                  DIGITAR
-                </Button>
-              </DialogTrigger>
-              <DialogContent>
-                <DialogHeader>
-                  <DialogTitle className="flex gap-1">
-                    <Keyboard size={18} />
-                    {editingIndex !== null ? "Editar" : "Digitar"} Lote
-                  </DialogTitle>
-                </DialogHeader>
-                <p className="text-base">Número do Lote</p>
-                <Input
-                  type="text"
-                  placeholder="Digite o lote..."
-                  value={loteInput}
-                  onChange={(e) => setLoteInput(e.target.value)}
-                  className="w-full border p-2 rounded border-gray-200"
-                  autoFocus
-                />
-                <p className="text-xs">
-                  Digite o número do lote no formato indicado
-                </p>
-                <div className="flex justify-end mt-4">
+              <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+                <DialogTrigger asChild>
                   <Button
-                    onClick={() => {
-                      setIsModalOpen(false);
-                      setLoteInput("");
-                    }}
-                    className="bg-gray-400 text-white text-base cursor-pointer"
+                    size={"large"}
+                    className="rounded-xs flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
                   >
-                    <X size={18} />
-                    Cancelar
+                    <Keyboard size={18} />
+                    DIGITAR
                   </Button>
-
-                  <DialogClose>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogHeader>
+                    <DialogTitle className="flex gap-1">
+                      <Keyboard size={18} />
+                      {editingIndex !== null ? "Editar" : "Digitar"} Lote
+                    </DialogTitle>
+                  </DialogHeader>
+                  <p className="text-base">Número do Lote</p>
+                  <Input
+                    type="text"
+                    placeholder="Digite o lote..."
+                    value={loteInput}
+                    onChange={(e) => setLoteInput(e.target.value)}
+                    className="w-full border p-2 rounded border-gray-200"
+                    autoFocus
+                  />
+                  <p className="text-xs">
+                    Digite o número do lote no formato indicado
+                  </p>
+                  <div className="flex justify-end mt-4">
                     <Button
-                      onClick={handleSaveLote}
-                      className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
+                      onClick={() => {
+                        setIsModalOpen(false);
+                        setLoteInput("");
+                      }}
+                      className="bg-gray-400 text-white text-base cursor-pointer"
                     >
-                      <Check size={18} />
-                      Confirmar
+                      <X size={18} />
+                      Cancelar
                     </Button>
-                  </DialogClose>
-                </div>
-              </DialogContent>
-            </Dialog>
+                    <DialogClose>
+                      <Button
+                        onClick={handleSaveLote}
+                        className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
+                      >
+                        <Check size={18} />
+                        Confirmar
+                      </Button>
+                    </DialogClose>
+                  </div>
+                </DialogContent>
+              </Dialog>
+            </div>
 
-            <Button
-              size={"large"}
-              onClick={() => setIsScannerOpen(true)}
-              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-            >
-              <Barcode size={18} /> CARREGAR
-            </Button>
+            <div className="flex gap-2 ">
+              <Button
+                size={"large"}
+                onClick={() => setIsScannerOpen(true)}
+                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+              >
+                <Barcode size={18} /> CARREGAR
+              </Button>
 
-            <Button
-              onClick={() => handleSubmit("A")}
-              size={"large"}
-              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
-            >
-              <X size={18} /> ENCERRAR
-            </Button>
+              <Button
+                onClick={() => handleSubmit("A")}
+                size={"large"}
+                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
+              >
+                <X size={18} /> ENCERRAR
+              </Button>
+            </div>
           </div>
         </div>
       )}
