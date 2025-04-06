@@ -39,7 +39,7 @@ export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
         Quagga.start();
       }
     );
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Quagga.onDetected((result: any) => {
       if (result.codeResult.code) {
         onDetected(result.codeResult.code);
