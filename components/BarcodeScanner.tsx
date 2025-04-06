@@ -1,5 +1,5 @@
-import { useEffect, useRef } from 'react';
-import Quagga from '@ericblade/quagga2';
+import { useEffect, useRef } from "react";
+import Quagga from "@ericblade/quagga2";
 
 interface BarcodeScannerProps {
   onDetected: (code: string) => void;
@@ -15,20 +15,25 @@ export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
     Quagga.init(
       {
         inputStream: {
-          name: 'Live',
-          type: 'LiveStream',
+          name: "Live",
+          type: "LiveStream",
           target: videoRef.current,
           constraints: {
-            facingMode: 'environment', 
+            facingMode: "environment",
           },
         },
         decoder: {
-          readers: ['code_128_reader', 'ean_reader', 'ean_8_reader', 'code_39_reader'],
+          readers: [
+            "code_128_reader",
+            "ean_reader",
+            "ean_8_reader",
+            "code_39_reader",
+          ],
         },
       },
       (err: string) => {
         if (err) {
-          console.error('Erro ao inicializar Quagga:', err);
+          console.error("Erro ao inicializar Quagga:", err);
           return;
         }
         Quagga.start();
@@ -76,4 +81,4 @@ export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
       </div>
     </div>
   );
-} 
+}

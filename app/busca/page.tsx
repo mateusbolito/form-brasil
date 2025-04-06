@@ -6,13 +6,13 @@ import { FaSearch } from "react-icons/fa";
 import { useQueryGetOrder } from "@/services/useQueryGetOrder";
 import { Barcode, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { toast } from 'sonner';
-import { BarcodeScanner } from '@/components/BarcodeScanner';
+import { toast } from "sonner";
+import { BarcodeScanner } from "@/components/BarcodeScanner";
 
 export default function BuscaPvOp() {
   const [ordemProducao, setOrdemProducao] = useState("");
   const [pedidoVenda, setPedidoVenda] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
+
   const [isScannerOpenOP, setIsScannerOpenOP] = useState(false);
   const [isScannerOpenPV, setIsScannerOpenPV] = useState(false);
   const [isLoadingOP, setIsLoadingOP] = useState(false);
@@ -36,20 +36,28 @@ export default function BuscaPvOp() {
     await refetch();
   };
 
-useEffect(() => {
-  if (data && isSuccess && (isLoadingOP || isLoadingPV)) {
-    toast.success("Encontrado com sucesso!");
-    setIsLoadingOP(false);
-    setIsLoadingPV(false);
-    localStorage.setItem("formularioData", JSON.stringify(data));
-    router.push("/formulario");
-  }
-  if (isError && (isLoadingOP || isLoadingPV)) {
-    toast.error(`Erro durante a busca: ${error.message}`);
-    setIsLoadingOP(false);
-    setIsLoadingPV(false);
-  }
-}, [data, isSuccess, isError]);
+  useEffect(() => {
+    if (data && isSuccess && (isLoadingOP || isLoadingPV)) {
+      toast.success("Encontrado com sucesso!");
+      setIsLoadingOP(false);
+      setIsLoadingPV(false);
+      localStorage.setItem("formularioData", JSON.stringify(data));
+      router.push("/formulario");
+    }
+    if (isError && (isLoadingOP || isLoadingPV)) {
+      toast.error(`Erro durante a busca: ${error.message}`);
+      setIsLoadingOP(false);
+      setIsLoadingPV(false);
+    }
+  }, [
+    data,
+    isSuccess,
+    isError,
+    isLoadingOP,
+    isLoadingPV,
+    router,
+    error?.message,
+  ]);
 
   return (
     <div className="flex flex-col items-center justify-center text-center space-y-4 mt-5 px-4">
@@ -74,20 +82,21 @@ useEffect(() => {
             />
             <Button
               onClick={() => setIsScannerOpenOP(true)}
-              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
+              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer"
               title="Escanear Ordem"
             >
               <Barcode />
             </Button>
             <Button
               onClick={() => handleSearchClick(ordemProducao, "")}
-              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
+              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer"
             >
               {isLoadingOP && ordemProducao ? (
                 <Loader2 className="animate-spin" />
               ) : (
                 <FaSearch />
-              )}            </Button>
+              )}{" "}
+            </Button>
           </div>
         </div>
         <div className="flex flex-col w-full max-w-xs sm:max-w-md sm:ml-0">
@@ -104,14 +113,14 @@ useEffect(() => {
             />
             <Button
               onClick={() => setIsScannerOpenPV(true)}
-              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
+              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white cursor-pointer"
               title="Escanear Pedido"
             >
               <Barcode />
             </Button>
             <Button
               onClick={() => handleSearchClick("", pedidoVenda)}
-              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
+              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white  cursor-pointer"
             >
               {isLoadingPV && pedidoVenda ? (
                 <Loader2 className="animate-spin" />

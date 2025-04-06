@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Formulario, IOrderData } from "@/types/get-order";
+import { IOrderData } from "@/types/get-order";
 import {
   Barcode,
   Check,
@@ -22,10 +22,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { BarcodeScanner } from '@/components/BarcodeScanner';
-import { postFormularioCarregamento } from '@/services/sendFormQuery';
+import { BarcodeScanner } from "@/components/BarcodeScanner";
+import { postFormularioCarregamento } from "@/services/sendFormQuery";
 import { toast } from "sonner";
-import { FaPrint } from 'react-icons/fa';
+import { FaPrint } from "react-icons/fa";
 
 export default function FormularioCarregamento() {
   const [loteInput, setLoteInput] = useState("");
@@ -35,11 +35,11 @@ export default function FormularioCarregamento() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [dadosFaturamento, setDadosFaturamento] = useState({
-    quantidade: '',
-    placa: '',
-    transportadora: '',
-    localImpressao: '',
-    observacao: ''
+    quantidade: "",
+    placa: "",
+    transportadora: "",
+    localImpressao: "",
+    observacao: "",
   });
   const router = useRouter();
 
@@ -51,30 +51,32 @@ export default function FormularioCarregamento() {
     }
   }, []);
 
-useEffect(() => {
-  if (formData?.items[0]) {
-    const item = formData.items[0];
-    const formulario = item.FORMULARIO?.[0];
+  useEffect(() => {
+    if (formData?.items[0]) {
+      const item = formData.items[0];
+      const formulario = item.FORMULARIO?.[0];
 
-    if (formulario) {
-      setDadosFaturamento({
-        quantidade: formulario.ZP_QTDECAR || '',
-        placa: formulario.ZP_PLACA || '',
-        transportadora: formulario.ZP_TRANSP || '',
-        localImpressao: formulario.ZP_LOCIMP || '',
-        observacao: formulario.ZP_OBS || ''
-      });
-    }
+      if (formulario) {
+        setDadosFaturamento({
+          quantidade: formulario.ZP_QTDECAR || "",
+          placa: formulario.ZP_PLACA || "",
+          transportadora: formulario.ZP_TRANSP || "",
+          localImpressao: formulario.ZP_LOCIMP || "",
+          observacao: formulario.ZP_OBS || "",
+        });
+      }
 
-    if (formulario?.LOTES?.length) {
-      const lotesConvertidos = formulario.LOTES.map((lote: string, index: number) => ({
-        seq: index + 1,
-        lote
-      }));
-      setLotes(lotesConvertidos);
+      if (formulario?.LOTES?.length) {
+        const lotesConvertidos = formulario.LOTES.map(
+          (lote: string, index: number) => ({
+            seq: index + 1,
+            lote,
+          })
+        );
+        setLotes(lotesConvertidos);
+      }
     }
-  }
-}, [formData]);
+  }, [formData]);
 
   const handleSaveLote = () => {
     if (!loteInput.trim()) return;
@@ -109,56 +111,64 @@ useEffect(() => {
     setIsModalOpen(true);
   };
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
-    setDadosFaturamento(prev => ({
+    setDadosFaturamento((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
-const handleSubmit = async (status: "E" | "A") => {
-  try {
-    const item = formData?.items?.[0];
-    if (!item) {
-      toast.error("Dados do formulário não encontrados.");
-      return;
+  const handleSubmit = async (status: "E" | "A") => {
+    try {
+      const item = formData?.items?.[0];
+      if (!item) {
+        toast.error("Dados do formulário não encontrados.");
+        return;
+      }
+
+      const dadosFormulario = {
+        ZP_FILIAL: "02",
+        ZP_CODFORM: "FORMCARREGA0001",
+        ZP_CODUSER: "000000",
+        ZP_PEDIDO: item.ZQ_PEDIDO || "",
+        ZP_OP: item.ZQ_OP || "",
+        ZP_DATA: item.ZQ_DTENTR || new Date().toISOString().split("T")[0],
+        ZP_NOTA: item.ZQ_NF || "",
+        ZP_QTDECAR: parseInt(dadosFaturamento.quantidade) || 0,
+        ZP_PLACA: dadosFaturamento.placa || "",
+        ZP_TRANSP: dadosFaturamento.transportadora || "",
+        ZP_LOCIMP: dadosFaturamento.localImpressao || "",
+        ZP_OBS: dadosFaturamento.observacao || "",
+        ZP_STATUS: status, // <-- status dinâmico
+        ZP_LOTE: lotes.map((l) => l.lote),
+      };
+
+      await postFormularioCarregamento(dadosFormulario);
+      toast.success(
+        `Formulário ${status === "A" ? "encerrado" : "salvo"} com sucesso!`
+      );
+    } catch {
+      toast.error("Erro ao enviar formulário");
     }
+  };
 
-    const dadosFormulario = {
-      ZP_FILIAL: "02",
-      ZP_CODFORM: "FORMCARREGA0001",
-      ZP_CODUSER: "000000",
-      ZP_PEDIDO: item.ZQ_PEDIDO || "",
-      ZP_OP: item.ZQ_OP || "",
-      ZP_DATA: item.ZQ_DTENTR || new Date().toISOString().split("T")[0],
-      ZP_NOTA: item.ZQ_NF || "",
-      ZP_QTDECAR: parseInt(dadosFaturamento.quantidade) || 0,
-      ZP_PLACA: dadosFaturamento.placa || "",
-      ZP_TRANSP: dadosFaturamento.transportadora || "",
-      ZP_LOCIMP: dadosFaturamento.localImpressao || "",
-      ZP_OBS: dadosFaturamento.observacao || "",
-      ZP_STATUS: status, // <-- status dinâmico
-      ZP_LOTE: lotes.map((l) => l.lote),
-    };
-
-    await postFormularioCarregamento(dadosFormulario);
-    toast.success(`Formulário ${status === "A" ? "encerrado" : "salvo"} com sucesso!`);
-  } catch (error) {
-    toast.error("Erro ao enviar formulário");
-  }
-};
-
-  const isEncerrado = formData?.items?.[0]?.FORMULARIO?.[0]?.ZP_STATUS === "Encerrado";
+  const isEncerrado =
+    formData?.items?.[0]?.FORMULARIO?.[0]?.ZP_STATUS === "Encerrado";
   console.log(isEncerrado);
   console.log(formData);
 
   return (
     <div className="container mx-auto max-w-4xl p-6 min-h-screen pb-28">
       <h2 className="flex text-3xl font-bold mb-4 mt-7 gap-4">
-      <button onClick={() => router.push("/busca")} className="cursor-pointer ">
-        <ArrowLeftCircle />
-      </button>
+        <button
+          onClick={() => router.push("/busca")}
+          className="cursor-pointer "
+        >
+          <ArrowLeftCircle />
+        </button>
         Formulário de Carregamento
       </h2>
       <span className="border-t-2 flex border-t-gray-100"></span>
@@ -299,64 +309,72 @@ const handleSubmit = async (status: "E" | "A") => {
         Dados Para Faturamento
       </h2>
       <span className="border-t-2 flex border-t-gray-100"></span>
-<div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
-  <div className="w-full md:w-1/4">
-    <label className="block text-sm font-medium text-left">Quantidade</label>
-    <Input
-      name="quantidade"
-      type="number"
-      onChange={handleInputChange}
-      value={dadosFaturamento.quantidade}
-      disabled={isEncerrado}
-    />
-  </div>
+      <div className="flex flex-col md:flex-row gap-4 mb-4 mt-7">
+        <div className="w-full md:w-1/4">
+          <label className="block text-sm font-medium text-left">
+            Quantidade
+          </label>
+          <Input
+            name="quantidade"
+            type="number"
+            onChange={handleInputChange}
+            value={dadosFaturamento.quantidade}
+            disabled={isEncerrado}
+          />
+        </div>
 
-  <div className="w-full md:w-1/4">
-    <label className="block text-sm font-medium text-left">Placa</label>
-    <Input
-      name="placa"
-      type="text"
-      onChange={handleInputChange}
-      value={dadosFaturamento.placa}
-      disabled={isEncerrado}
-    />
-  </div>
+        <div className="w-full md:w-1/4">
+          <label className="block text-sm font-medium text-left">Placa</label>
+          <Input
+            name="placa"
+            type="text"
+            onChange={handleInputChange}
+            value={dadosFaturamento.placa}
+            disabled={isEncerrado}
+          />
+        </div>
 
-  <div className="w-full md:w-1/4">
-    <label className="block text-sm font-medium text-left">Transportadora</label>
-    <Input
-      name="transportadora"
-      type="text"
-      onChange={handleInputChange}
-      value={dadosFaturamento.transportadora}
-      disabled={isEncerrado}
-    />
-  </div>
+        <div className="w-full md:w-1/4">
+          <label className="block text-sm font-medium text-left">
+            Transportadora
+          </label>
+          <Input
+            name="transportadora"
+            type="text"
+            onChange={handleInputChange}
+            value={dadosFaturamento.transportadora}
+            disabled={isEncerrado}
+          />
+        </div>
 
-  <div className="w-full md:w-1/4">
-    <label className="block text-sm font-medium text-left">Local de Impressão NFe</label>
-    <Input
-      name="localImpressao"
-      type="text"
-      onChange={handleInputChange}
-      value={dadosFaturamento.localImpressao}
-      disabled={isEncerrado}
-    />
-  </div>
-</div>
+        <div className="w-full md:w-1/4">
+          <label className="block text-sm font-medium text-left">
+            Local de Impressão NFe
+          </label>
+          <Input
+            name="localImpressao"
+            type="text"
+            onChange={handleInputChange}
+            value={dadosFaturamento.localImpressao}
+            disabled={isEncerrado}
+          />
+        </div>
+      </div>
 
-<div className="w-full">
-  <label className="block text-sm font-medium text-left">Observação de Faturamento</label>
-  <textarea
-    name="observacao"
-    className="w-full border h-[80px] p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 disabled:cursor-not-allowed disabled:bg-[#f8f9fa]"
-    placeholder="Observações sobre o faturamento"
-    rows={4}
-    onChange={handleInputChange}
-    value={dadosFaturamento.observacao}
-    disabled={isEncerrado}
-  />
-</div>
+      <div className="w-full">
+        <label className="block text-sm font-medium text-left">
+          Observação de Faturamento
+        </label>
+        <textarea
+          name="observacao"
+          className="w-full border h-[80px] p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 disabled:cursor-not-allowed disabled:bg-[#f8f9fa]"
+          placeholder="Observações sobre o faturamento"
+          rows={4}
+          onChange={handleInputChange}
+          value={dadosFaturamento.observacao}
+          disabled={isEncerrado}
+        />
+      </div>
 
       <h2 className="flex text-3xl font-bold mb-4 mt-7">CARREGAMENTO </h2>
 
@@ -400,92 +418,96 @@ const handleSubmit = async (status: "E" | "A") => {
         </table>
       </div>
 
-      {!isEncerrado && <div className="flex flex-col gap-4 mt-6">
-        <div className="flex justify-start gap-[5px]">
-          <Button
-            onClick={() => router.back()}
-            size={"large"}
-            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-          >
-            <ArrowLeftCircle size={18} /> VOLTAR
-          </Button>
+      {!isEncerrado && (
+        <div className="flex flex-col gap-4 mt-6">
+          <div className="flex justify-start gap-[5px]">
+            <Button
+              onClick={() => router.back()}
+              size={"large"}
+              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+            >
+              <ArrowLeftCircle size={18} /> VOLTAR
+            </Button>
 
-          <Button 
-            onClick={() => handleSubmit("E")}
-            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white h-9.5"
-          >
-            <Save size={18} /> SALVAR
-          </Button>
+            <Button
+              onClick={() => handleSubmit("E")}
+              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white h-9.5"
+            >
+              <Save size={18} /> SALVAR
+            </Button>
 
-          <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-            <DialogTrigger asChild>
-              <Button
-                size={"large"}
-                className="rounded-xs flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19]  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-              >
-                <Keyboard size={18} />
-                DIGITAR
-              </Button>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="flex gap-1">
-                  <Keyboard size={18} />
-                  {editingIndex !== null ? "Editar" : "Digitar"} Lote
-                </DialogTitle>
-              </DialogHeader>
-              <p className="text-base">Número do Lote</p>
-              <Input
-                type="text"
-                placeholder="Digite o lote..."
-                value={loteInput}
-                onChange={(e) => setLoteInput(e.target.value)}
-                className="w-full border p-2 rounded border-gray-200"
-                autoFocus
-              />
-              <p className="text-xs">Digite o número do lote no formato indicado</p>
-              <div className="flex justify-end mt-4">
-                <Button 
-                  onClick={() => {
-                    setIsModalOpen(false);
-                    setLoteInput("");
-                  }} 
-                  className="bg-gray-400 text-white text-base cursor-pointer"
+            <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+              <DialogTrigger asChild>
+                <Button
+                  size={"large"}
+                  className="rounded-xs flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19]  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
                 >
-                  <X size={18} />
-                  Cancelar
+                  <Keyboard size={18} />
+                  DIGITAR
                 </Button>
-
-                <DialogClose>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="flex gap-1">
+                    <Keyboard size={18} />
+                    {editingIndex !== null ? "Editar" : "Digitar"} Lote
+                  </DialogTitle>
+                </DialogHeader>
+                <p className="text-base">Número do Lote</p>
+                <Input
+                  type="text"
+                  placeholder="Digite o lote..."
+                  value={loteInput}
+                  onChange={(e) => setLoteInput(e.target.value)}
+                  className="w-full border p-2 rounded border-gray-200"
+                  autoFocus
+                />
+                <p className="text-xs">
+                  Digite o número do lote no formato indicado
+                </p>
+                <div className="flex justify-end mt-4">
                   <Button
-                    onClick={handleSaveLote}
-                    className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
+                    onClick={() => {
+                      setIsModalOpen(false);
+                      setLoteInput("");
+                    }}
+                    className="bg-gray-400 text-white text-base cursor-pointer"
                   >
-                    <Check size={18} />
-                    Confirmar
+                    <X size={18} />
+                    Cancelar
                   </Button>
-                </DialogClose>
-              </div>
-            </DialogContent>
-          </Dialog>
 
-          <Button
-            size={"large"}
-            onClick={() => setIsScannerOpen(true)}
-            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-          >
-            <Barcode size={18} /> CARREGAR
-          </Button>
+                  <DialogClose>
+                    <Button
+                      onClick={handleSaveLote}
+                      className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
+                    >
+                      <Check size={18} />
+                      Confirmar
+                    </Button>
+                  </DialogClose>
+                </div>
+              </DialogContent>
+            </Dialog>
 
-        <Button
-          onClick={() => handleSubmit("A")}
-          size={"large"}
-          className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
-        >
-          <X size={18} /> ENCERRAR
-        </Button>
+            <Button
+              size={"large"}
+              onClick={() => setIsScannerOpen(true)}
+              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs  bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+            >
+              <Barcode size={18} /> CARREGAR
+            </Button>
+
+            <Button
+              onClick={() => handleSubmit("A")}
+              size={"large"}
+              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-xs bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
+            >
+              <X size={18} /> ENCERRAR
+            </Button>
+          </div>
         </div>
-      </div>}
+      )}
       <div className="flex items-center justify-center mt-3">
         <Button
           onClick={() => window.print()}
