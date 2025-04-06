@@ -11,7 +11,7 @@ export default function Perfil() {
 
       <div className="flex items-center justify-center ">
         <Avatar className="w-[96px] h-[96px] mt-7 ">
-          <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
+          <AvatarImage src="https://secure.gravatar.com/avatar/58dba17dd96a2558e67dae0eb7751a1d?s=96&d=mm&r=g" alt="@shadcn" />
           <AvatarFallback>CN</AvatarFallback>
         </Avatar>
       </div>

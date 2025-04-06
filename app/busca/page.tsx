@@ -4,32 +4,52 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FaSearch } from "react-icons/fa";
 import { useQueryGetOrder } from "@/services/useQueryGetOrder";
-import { Loader2 } from "lucide-react";
+import { Barcode, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from 'sonner';
+import { BarcodeScanner } from '@/components/BarcodeScanner';
 
 export default function BuscaPvOp() {
   const [ordemProducao, setOrdemProducao] = useState("");
   const [pedidoVenda, setPedidoVenda] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isScannerOpenOP, setIsScannerOpenOP] = useState(false);
+  const [isScannerOpenPV, setIsScannerOpenPV] = useState(false);
+  const [isLoadingOP, setIsLoadingOP] = useState(false);
+  const [isLoadingPV, setIsLoadingPV] = useState(false);
 
   const router = useRouter();
-  const { data, refetch, isSuccess } = useQueryGetOrder({
+  const { data, refetch, isSuccess, isError, error } = useQueryGetOrder({
     ordemProducao,
     pedidoVenda,
   });
 
   const handleSearchClick = async (op: string, pv: string) => {
-    setIsLoading(true);
+    if (op) {
+      setIsLoadingOP(true);
+      setIsLoadingPV(false);
+    } else if (pv) {
+      setIsLoadingPV(true);
+      setIsLoadingOP(false);
+    }
+
     await refetch();
   };
 
-  useEffect(() => {
-    if (data && isSuccess) {
-      setIsLoading(false);
-      localStorage.setItem("formularioData", JSON.stringify(data));
-      router.push("/formulario");
-    }
-  }, [data, isSuccess]);
+useEffect(() => {
+  if (data && isSuccess && (isLoadingOP || isLoadingPV)) {
+    toast.success("Encontrado com sucesso!");
+    setIsLoadingOP(false);
+    setIsLoadingPV(false);
+    localStorage.setItem("formularioData", JSON.stringify(data));
+    router.push("/formulario");
+  }
+  if (isError && (isLoadingOP || isLoadingPV)) {
+    toast.error(`Erro durante a busca: ${error.message}`);
+    setIsLoadingOP(false);
+    setIsLoadingPV(false);
+  }
+}, [data, isSuccess, isError]);
 
   return (
     <div className="flex flex-col items-center justify-center text-center space-y-4 mt-5 px-4">
@@ -50,23 +70,29 @@ export default function BuscaPvOp() {
               placeholder="Op"
               value={ordemProducao}
               onChange={(e) => setOrdemProducao(e.target.value)}
-              className="w-full mt-1"
+              className="w-full mt-1 h-[42px]"
             />
+            <Button
+              onClick={() => setIsScannerOpenOP(true)}
+              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
+              title="Escanear Ordem"
+            >
+              <Barcode />
+            </Button>
             <Button
               onClick={() => handleSearchClick(ordemProducao, "")}
               className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
             >
-              {isLoading && ordemProducao ? (
+              {isLoadingOP && ordemProducao ? (
                 <Loader2 className="animate-spin" />
               ) : (
                 <FaSearch />
-              )}
-            </Button>
+              )}            </Button>
           </div>
         </div>
-        <div className="flex flex-col w-full max-w-xs sm:max-w-md sm:ml-0 mt-4 sm:mt-0">
-          <label htmlFor="pedido" className="text-left w-full">
-            Pedido de Venda
+        <div className="flex flex-col w-full max-w-xs sm:max-w-md sm:ml-0">
+          <label htmlFor="ordem" className="text-left w-full">
+            Pedido de venda
           </label>
           <div className="flex items-center gap-1.5 w-full">
             <Input
@@ -74,13 +100,20 @@ export default function BuscaPvOp() {
               placeholder="Pv"
               value={pedidoVenda}
               onChange={(e) => setPedidoVenda(e.target.value)}
-              className="w-full mt-1"
+              className="w-full mt-1 h-[42px]"
             />
+            <Button
+              onClick={() => setIsScannerOpenPV(true)}
+              className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
+              title="Escanear Pedido"
+            >
+              <Barcode />
+            </Button>
             <Button
               onClick={() => handleSearchClick("", pedidoVenda)}
               className="w-[42px] h-[42px] bg-white border-2 border-[#1D4D19] text-[#1D4D19] hover:bg-[#1D4D19] hover:text-white"
             >
-              {isLoading && pedidoVenda ? (
+              {isLoadingPV && pedidoVenda ? (
                 <Loader2 className="animate-spin" />
               ) : (
                 <FaSearch />
@@ -88,6 +121,25 @@ export default function BuscaPvOp() {
             </Button>
           </div>
         </div>
+        {isScannerOpenOP && (
+          <BarcodeScanner
+            onDetected={(code) => {
+              setOrdemProducao(code);
+              setIsScannerOpenOP(false);
+            }}
+            onClose={() => setIsScannerOpenOP(false)}
+          />
+        )}
+
+        {isScannerOpenPV && (
+          <BarcodeScanner
+            onDetected={(code) => {
+              setPedidoVenda(code);
+              setIsScannerOpenPV(false);
+            }}
+            onClose={() => setIsScannerOpenPV(false)}
+          />
+        )}
       </main>
     </div>
   );

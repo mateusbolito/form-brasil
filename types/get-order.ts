@@ -38,6 +38,10 @@ export interface Item {
   ZQ_STATUS: string
   USUARIO: Usuario[]
   FORMULARIO: Formulario[]
+  ZQ_QTDECAR: string
+  ZQ_PLACA: string
+  ZQ_TRANSP: string
+  ZQ_LOCIMP: string
 }
 
 export interface Usuario {

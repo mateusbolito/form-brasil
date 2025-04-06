@@ -32,6 +32,6 @@ export function useQueryGetOrder({ ordemProducao, pedidoVenda }: ConsultarOrdemP
       }
     },
     enabled: false,
-    retry: false
+    retry: false,
   });
 }

@@ -29,7 +29,7 @@ export default function Header() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="cursor-pointer w-12 h-12 ">
-                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarImage src="https://secure.gravatar.com/avatar/58dba17dd96a2558e67dae0eb7751a1d?s=96&d=mm&r=g" alt="@shadcn" />
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
