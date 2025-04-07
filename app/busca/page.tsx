@@ -28,9 +28,11 @@ export default function BuscaPvOp() {
     if (op) {
       setIsLoadingOP(true);
       setIsLoadingPV(false);
+      setPedidoVenda(""); // zera o outro campo
     } else if (pv) {
       setIsLoadingPV(true);
       setIsLoadingOP(false);
+      setOrdemProducao(""); // zera o outro campo
     }
 
     await refetch();
