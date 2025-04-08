@@ -69,7 +69,7 @@ export default function BuscaPvOp() {
       <h4 className="text-[#1D4D19] text-lg sm:text-2xl font-semibold">
         Preencha apenas um dos campos abaixo
       </h4>
-      <main className="flex flex-col items-center justify-center sm:flex-row sm:items-start sm:justify-start sm:gap-3 w-full max-w-lg">
+      <main className="flex flex-col items-center justify-center sm:flex-row sm:items-start sm:justify-start sm:gap-3 gap-4 w-full max-w-lg">
         <div className="flex flex-col w-full max-w-xs sm:max-w-md sm:ml-0">
           <label htmlFor="ordem" className="text-left w-full">
             Ordem de Produção
@@ -77,9 +77,17 @@ export default function BuscaPvOp() {
           <div className="flex items-center gap-1.5 w-full">
             <Input
               type="text"
-              placeholder="Op"
+              placeholder="OP"
               value={ordemProducao}
               onChange={(e) => setOrdemProducao(e.target.value)}
+              onKeyDown={
+                (e) => {
+                  if(e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearchClick(ordemProducao, "");
+                  }
+                } 
+              }
               className="w-full mt-1 h-[42px]"
             />
             <Button
@@ -108,9 +116,17 @@ export default function BuscaPvOp() {
           <div className="flex items-center gap-1.5 w-full">
             <Input
               type="text"
-              placeholder="Pv"
+              placeholder="PV"
               value={pedidoVenda}
               onChange={(e) => setPedidoVenda(e.target.value)}
+               onKeyDown={
+                (e) => {
+                  if(e.key === "Enter") {
+                    e.preventDefault();
+                    handleSearchClick("", pedidoVenda);
+                  }
+                } 
+              }
               className="w-full mt-1 h-[42px]"
             />
             <Button

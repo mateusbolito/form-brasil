@@ -36,7 +36,8 @@ export function useQueryGetOrder({ ordemProducao, pedidoVenda }: ConsultarOrdemP
         const response = await api.get(`formulario/carregamento/000000/${pedidoParam}/${ordemParam}`);
         return response.data;
       } catch (e: unknown) {
-        throw new Error((e as Error)?.message || 'Erro ao buscar ordem');
+        console.log(e);
+        throw new Error((e as any)?.response?.data?._messages[0]?.message || 'Erro ao buscar ordem');
       }
     },
     enabled: false,
