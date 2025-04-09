@@ -28,10 +28,9 @@ import { postFormularioCarregamento } from "@/services/sendFormQuery";
 import { toast } from "sonner";
 import { FaPrint } from "react-icons/fa";
 import html2canvas from "html2canvas-pro";
-import { jsPDF } from "jspdf"
+import { jsPDF } from "jspdf";
 
 export default function FormularioCarregamento() {
-  const printRef = useRef(null);
   const [loteInput, setLoteInput] = useState("");
   const [lotes, setLotes] = useState<{ seq: number; lote: string }[]>([]);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
@@ -40,7 +39,9 @@ export default function FormularioCarregamento() {
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [modalEncerrar, setOpenModalEncerrar] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
-  const [loteExpandidoIndex, setLoteExpandidoIndex] = useState<number | null>(null);
+  const [loteExpandidoIndex, setLoteExpandidoIndex] = useState<number | null>(
+    null
+  );
   const [dadosFaturamento, setDadosFaturamento] = useState({
     quantidade: "",
     placa: "",
@@ -118,7 +119,10 @@ export default function FormularioCarregamento() {
       setLotes((prev) => {
         const novosLotes = [...prev, { seq: prev.length + 1, lote: loteInput }];
         setTimeout(() => {
-          scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+          scrollRef.current?.scrollTo({
+            top: scrollRef.current.scrollHeight,
+            behavior: "smooth",
+          });
         }, 100);
         return novosLotes;
       });
@@ -200,7 +204,7 @@ export default function FormularioCarregamento() {
 
   function formatarLote(lote: string) {
     if (!lote) {
-      return '';
+      return "";
     }
     if (isWideScreen) {
       return lote;
@@ -303,17 +307,25 @@ export default function FormularioCarregamento() {
         <div><strong>Pedido:</strong> ${formData.items[0]?.ZQ_PEDIDO}</div>
         <div><strong>Quantidade:</strong> ${formData.items[0]?.ZQ_QTDE}</div>
         <div><strong>Entrega:</strong> ${formData.items[0]?.ZQ_DTENTR}</div>
-        <div><strong>Local Entrega:</strong> ${formData.items[0]?.ZQ_LOCENT}</div>
+        <div><strong>Local Entrega:</strong> ${
+          formData.items[0]?.ZQ_LOCENT
+        }</div>
       </div>
 
       <h3>DADOS PARA FATURAMENTO</h3>
       <div class="grid">
         <div><strong>Qtd:</strong> ${dadosFaturamento.quantidade}</div>
         <div><strong>Placa:</strong> ${dadosFaturamento.placa}</div>
-        <div><strong>Transportadora:</strong> ${dadosFaturamento.transportadora}</div>
-        <div><strong>Local Impressão:</strong> ${dadosFaturamento.localImpressao}</div>
+        <div><strong>Transportadora:</strong> ${
+          dadosFaturamento.transportadora
+        }</div>
+        <div><strong>Local Impressão:</strong> ${
+          dadosFaturamento.localImpressao
+        }</div>
       </div>
-      <div style="margin-top: 4px;"><strong>Obs. Faturamento:</strong> ${dadosFaturamento.observacao}</div>
+      <div style="margin-top: 4px;"><strong>Obs. Faturamento:</strong> ${
+        dadosFaturamento.observacao
+      }</div>
 
       <h3>CARREGAMENTO</h3>
       <table>
@@ -324,11 +336,15 @@ export default function FormularioCarregamento() {
           </tr>
         </thead>
         <tbody>
-          ${lotes.map(item => `
+          ${lotes
+            .map(
+              (item) => `
             <tr>
               <td class="text-center">${item.seq}</td>
               <td>${item.lote}</td>
-            </tr>`).join('')}
+            </tr>`
+            )
+            .join("")}
         </tbody>
       </table>
     </body>
@@ -357,8 +373,6 @@ export default function FormularioCarregamento() {
     document.body.removeChild(iframe);
   };
 
-
-
   return (
     <div className="container mx-auto max-w-4xl p-6 min-h-screen pb-28">
       <Dialog open={modalEncerrar} onOpenChange={setOpenModalEncerrar}>
@@ -368,7 +382,10 @@ export default function FormularioCarregamento() {
               Encerrar formulário
             </DialogTitle>
           </DialogHeader>
-          <p className="text-base">Deseja encerrar o formulário de carregamento? Esta ação não pode ser desfeita!</p>
+          <p className="text-base">
+            Deseja encerrar o formulário de carregamento? Esta ação não pode ser
+            desfeita!
+          </p>
           <div className="flex justify-end mt-4 gap-2">
             <Button
               onClick={() => {
@@ -380,7 +397,9 @@ export default function FormularioCarregamento() {
               Cancelar
             </Button>
             <Button
-              onClick={() => { handleSubmit("E"); }}
+              onClick={() => {
+                handleSubmit("E");
+              }}
               className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
             >
               <Check size={18} />
@@ -410,7 +429,10 @@ export default function FormularioCarregamento() {
               Fechar
             </Button>
             <Button
-              onClick={() => { setIsModalOpen(true); setModalConfirmation(false); }}
+              onClick={() => {
+                setIsModalOpen(true);
+                setModalConfirmation(false);
+              }}
               size={"large"}
               className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
             >
@@ -419,7 +441,10 @@ export default function FormularioCarregamento() {
             </Button>
             <Button
               size={"large"}
-              onClick={() => { setIsScannerOpen(true); setModalConfirmation(false); }}
+              onClick={() => {
+                setIsScannerOpen(true);
+                setModalConfirmation(false);
+              }}
               className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
             >
               <Barcode size={18} /> CARREGAR
@@ -436,7 +461,8 @@ export default function FormularioCarregamento() {
           borderRadius: "8px",
           boxShadow: isMobile ? "none" : "0 0 10px rgba(0,0,0,0.1)",
           width: "100%",
-        }}>
+        }}
+      >
         <h2 className="flex text-3xl font-bold mb-4 mt-7 gap-4">
           <button
             onClick={() => router.push("/busca")}
@@ -616,7 +642,7 @@ export default function FormularioCarregamento() {
               Transportadora
             </label>
             <Input
-              className='mt-[15px]'
+              className="mt-[15px]"
               name="transportadora"
               type="text"
               onChange={handleInputChange}
@@ -658,23 +684,27 @@ export default function FormularioCarregamento() {
         <h2 className="flex text-3xl font-bold mb-4 mt-7">Carregamento </h2>
         <span className="border-t-2 flex border-t-gray-100"></span>
         <div className="w-full mt-4">
-          <div className='flex gap-2'>
-            {!isEncerrado && <Button
-              size={"large"}
-              onClick={() => setIsScannerOpen(true)}
-              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-            >
-              <Barcode size={18} /> CARREGAR
-            </Button>}
+          <div className="flex gap-2">
+            {!isEncerrado && (
+              <Button
+                size={"large"}
+                onClick={() => setIsScannerOpen(true)}
+                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+              >
+                <Barcode size={18} /> CARREGAR
+              </Button>
+            )}
             <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
               <DialogTrigger asChild>
-                {!isEncerrado && <Button
-                  size={"large"}
-                  className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-                >
-                  <Keyboard size={18} />
-                  DIGITAR
-                </Button>}
+                {!isEncerrado && (
+                  <Button
+                    size={"large"}
+                    className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+                  >
+                    <Keyboard size={18} />
+                    DIGITAR
+                  </Button>
+                )}
               </DialogTrigger>
               <DialogContent>
                 <DialogHeader>
@@ -727,29 +757,37 @@ export default function FormularioCarregamento() {
             <table className="min-w-full  border-gray-200">
               <thead className="sticky bg-gray-100">
                 <tr>
-                  <th className="border border-gray-300 px-2 py-1 text-left w-16">SEQ</th>
+                  <th className="border border-gray-300 px-2 py-1 text-left w-16">
+                    SEQ
+                  </th>
                   <th className="border border-gray-300 px-2 py-1 text-left min-w-[100px]">
                     LOTE
                   </th>
-                  <th className="border border-gray-300 px-2 py-1 text-left w-24">AÇÃO</th>
+                  <th className="border border-gray-300 px-2 py-1 text-left w-24">
+                    AÇÃO
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {lotes.map((item, index) => (
                   <tr key={index} className="border-gray-300">
-                    <td className="border-r border-l border-b border-gray-300 px-2 py-1">{item.seq}</td>
-                    <td className="border-r border-b border-gray-300 px-2 py-1 whitespace-nowrap overflow-x-auto max-w-[240px]" onClick={() =>
-                      setLoteExpandidoIndex(
-                        loteExpandidoIndex === index ? null : index
-                      )
-                    }
+                    <td className="border-r border-l border-b border-gray-300 px-2 py-1">
+                      {item.seq}
+                    </td>
+                    <td
+                      className="border-r border-b border-gray-300 px-2 py-1 whitespace-nowrap overflow-x-auto max-w-[240px]"
+                      onClick={() =>
+                        setLoteExpandidoIndex(
+                          loteExpandidoIndex === index ? null : index
+                        )
+                      }
                     >
                       <div className="max-w-[85px] sm:max-w-none overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
                         {loteExpandidoIndex === index
                           ? item.lote
                           : item.lote.length > 8
-                            ? formatarLote(item.lote)
-                            : item.lote}
+                          ? formatarLote(item.lote)
+                          : item.lote}
                       </div>
                     </td>
 
