@@ -22,10 +22,15 @@ export default function Perfil() {
         cpd@raftembalagens.com.br
       </p>
 
-      <div className="flex items-center justify-center">
+      <div className="flex flex-col gap-4 items-center justify-center">
         <Link href="/senha">
-          <Button className="bg-[#1D4D19] text-white font-bold mt-6 cursor-pointer rounded-[2px] ">
+          <Button className="bg-[#1D4D19] text-white font-bold mt-6 cursor-pointer rounded-lg ">
             Mudar Senha
+          </Button>
+        </Link>
+        <Link href="/">
+          <Button className="bg-white border border-gray-300 text-black font-bold mt-6 cursor-pointer rounded-lg ">
+            Logout
           </Button>
         </Link>
       </div>

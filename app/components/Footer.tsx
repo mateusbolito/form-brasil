@@ -1,6 +1,6 @@
 "use client";
 
-import { Home, Search, X, CircleUserRound } from "lucide-react";
+import { Search, X, CircleUserRound, ArrowLeft } from "lucide-react";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -11,20 +11,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { useRouter } from 'next/navigation';
 
 export default function Footer() {
   const [open, setOpen] = useState(false);
-
+  const router = useRouter();
   return (
     <>
-      <footer className="fixed bottom-0 w-full bg-[#d4decf] h-20 flex items-center justify-around md:hidden">
-        <button onClick={() => setOpen(true)}>
-          <Search className="w-8 h-8 text-[#1D4D19] cursor-pointer" />
+      <footer className="fixed bottom-0 w-full bg-[#d4decf] h-20 flex items-center justify-around md:hidden z-50">
+        <button onClick={() => router.back()}>
+          <ArrowLeft className="w-8 h-8 text-[#1D4D19] cursor-pointer" />
         </button>
-
-        <Link href="/">
-          <Home className="w-8 h-8 text-[#1D4D19] cursor-pointer" />
-        </Link>
 
         <Link href="/perfil">
           <CircleUserRound className="w-8 h-8 text-[#1D4D19] cursor-pointer" />

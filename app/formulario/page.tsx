@@ -34,6 +34,8 @@ export default function FormularioCarregamento() {
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
   const [formData, setFormData] = useState<IOrderData>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalConfirmation, setModalConfirmation] = useState(false);
+  const [modalEncerrar, setOpenModalEncerrar] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
   const [loteExpandidoIndex, setLoteExpandidoIndex] = useState<number | null>(null);
   const [dadosFaturamento, setDadosFaturamento] = useState({
@@ -82,7 +84,7 @@ export default function FormularioCarregamento() {
     }
   }, [formData]);
 
-   useEffect(() => {
+  useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 640px)");
     setIsWideScreen(mediaQuery.matches);
     const handler = (e: MediaQueryListEvent) => setIsWideScreen(e.matches);
@@ -109,19 +111,7 @@ export default function FormularioCarregamento() {
         return novosLotes;
       });
       setLoteInput("");
-      toast("Lote adicionado! Deseja adicionar mais?", {
-        action: {
-          label: "Sim",
-          onClick: () => {
-            setLoteInput("");
-            setIsModalOpen(true);
-          },
-        },
-        cancel: {
-          label: "Não",
-          onClick: () => setIsModalOpen(false),
-        },
-      });
+      setModalConfirmation(true);
     }
   };
 
@@ -132,7 +122,12 @@ export default function FormularioCarregamento() {
   };
 
   const handleDeleteLote = (index: number) => {
-    const updatedLotes = lotes.filter((_, i) => i !== index);
+    const updatedLotes = lotes
+      .filter((_, i) => i !== index)
+      .map((lote, i) => ({
+        ...lote,
+        seq: i + 1,
+      }));
     setLotes(updatedLotes);
   };
 
@@ -191,24 +186,92 @@ export default function FormularioCarregamento() {
   console.log(isEncerrado);
   console.log(formData);
 
-function formatarLote(lote: string) {
-  if (!lote) {
-    return '';
-  }
-  if (isWideScreen) {
+  function formatarLote(lote: string) {
+    if (!lote) {
+      return '';
+    }
+    if (isWideScreen) {
+      return lote;
+    }
+
+    if (lote.length > 8) {
+      return lote.substring(0, 8) + "...";
+    }
+
+
     return lote;
   }
 
-  if (lote.length > 8) {
-    return lote.substring(0, 8) + "...";
-  }
-
-
-  return lote;
-}
-
   return (
     <div className="container mx-auto max-w-4xl p-6 min-h-screen pb-28">
+      <Dialog open={modalEncerrar} onOpenChange={setOpenModalEncerrar}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex gap-1">
+              Encerrar formulário
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-base">Deseja encerrar o formulário de carregamento? Esta ação não pode ser desfeita!</p>
+          <div className="flex justify-end mt-4 gap-2">
+            <Button
+              onClick={() => {
+                setOpenModalEncerrar(false);
+              }}
+              className="bg-gray-400 text-white text-base cursor-pointer"
+            >
+              <X size={18} />
+              Cancelar
+            </Button>
+            <Button
+              onClick={() => { handleSubmit("E"); }}
+                className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
+              >
+                <Check size={18} />
+                Confirmar
+              </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      <Dialog open={modalConfirmation} onOpenChange={setModalConfirmation}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex gap-1">
+              <Keyboard size={18} />
+              Novo lote
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-base">Deseja inserir um novo lote?</p>
+          <div className="flex justify-end mt-4 gap-2">
+            <Button
+              onClick={() => {
+                setModalConfirmation(false);
+                setLoteInput("");
+              }}
+              className="rounded-lg bg-gray-400 text-white text-base cursor-pointer"
+            >
+              <X size={18} />
+              Fechar
+            </Button>
+            <Button
+              onClick={() => { setIsModalOpen(true); setModalConfirmation(false); }}
+              size={"large"}
+              className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+            >
+              <Keyboard size={18} />
+              DIGITAR
+            </Button>
+            <Button
+              size={"large"}
+              onClick={() => { setIsScannerOpen(true); setModalConfirmation(false); }}
+              className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+            >
+              <Barcode size={18} /> CARREGAR
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+      
+
       <h2 className="flex text-3xl font-bold mb-4 mt-7 gap-4">
         <button
           onClick={() => router.push("/busca")}
@@ -344,7 +407,7 @@ function formatarLote(lote: string) {
           Observações
         </label>
         <textarea
-          className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 cursor-not-allowed disabled:bg-[#f8f9fa]"
+          className="w-full border h-[80px]  p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 cursor-not-allowed disabled:bg-[#f8f9fa]  disabled:text-gray-400"
           placeholder="Observações adicionais"
           value={formData?.items[0]?.ZQ_OBS}
           disabled
@@ -362,6 +425,7 @@ function formatarLote(lote: string) {
             Quantidade
           </label>
           <Input
+            className="mt-[15px]"
             name="quantidade"
             type="number"
             onChange={handleInputChange}
@@ -373,6 +437,7 @@ function formatarLote(lote: string) {
         <div className="w-full md:w-1/4">
           <label className="block text-sm font-medium text-left">Placa</label>
           <Input
+            className="mt-[15px]"
             name="placa"
             type="text"
             onChange={handleInputChange}
@@ -386,6 +451,7 @@ function formatarLote(lote: string) {
             Transportadora
           </label>
           <Input
+            className='mt-[15px]'
             name="transportadora"
             type="text"
             onChange={handleInputChange}
@@ -399,6 +465,7 @@ function formatarLote(lote: string) {
             Local de Impressão NFe
           </label>
           <Input
+            className="mt-[15px]"
             name="localImpressao"
             type="text"
             onChange={handleInputChange}
@@ -414,7 +481,7 @@ function formatarLote(lote: string) {
         </label>
         <textarea
           name="observacao"
-          className="w-full border h-[80px] p-2 rounded border-gray-200 mt-[15px] focus:ring-2 focus:ring-blue-200 focus:border-blue-200 disabled:cursor-not-allowed disabled:bg-[#f8f9fa]"
+          className="w-full mt-[15px] border h-[80px] p-2 rounded border-gray-200 focus:ring-2 focus:ring-blue-200 focus:border-blue-200 disabled:cursor-not-allowed disabled:bg-[#f8f9fa] disabled:text-gray-400"
           placeholder="Observações sobre o faturamento"
           rows={4}
           onChange={handleInputChange}
@@ -424,141 +491,141 @@ function formatarLote(lote: string) {
       </div>
 
       <h2 className="flex text-3xl font-bold mb-4 mt-7">Carregamento </h2>
-
+      <span className="border-t-2 flex border-t-gray-100"></span>
       <div className="w-full mt-4">
         <div className='flex gap-2'>
-        <Button
-          size={"large"}
-          onClick={() => setIsScannerOpen(true)}
-          className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-        >
-          <Barcode size={18} /> CARREGAR
-        </Button>
-        <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
-          <DialogTrigger asChild>
-            <Button
-              size={"large"}
-              className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
-            >
+          {isEncerrado && <Button
+            size={"large"}
+            onClick={() => setIsScannerOpen(true)}
+            className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+          >
+            <Barcode size={18} /> CARREGAR
+          </Button>}
+<Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
+        <DialogTrigger asChild>
+          {isEncerrado && <Button
+            size={"large"}
+            className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+          >
+            <Keyboard size={18} />
+            DIGITAR
+          </Button>}
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="flex gap-1">
               <Keyboard size={18} />
-              DIGITAR
+              {editingIndex !== null ? "Editar" : "Digitar"} Lote
+            </DialogTitle>
+          </DialogHeader>
+          <p className="text-base">Número do Lote</p>
+          <Input
+            type="text"
+            placeholder="Digite o lote..."
+            value={loteInput}
+            onChange={(e) => setLoteInput(e.target.value)}
+            className="w-full border p-2 rounded border-gray-200"
+            autoFocus
+          />
+          <p className="text-xs">
+            Digite o número do lote no formato indicado
+          </p>
+          <div className="flex justify-end mt-4">
+            <Button
+              onClick={() => {
+                setIsModalOpen(false);
+                setLoteInput("");
+              }}
+              className="bg-gray-400 text-white text-base cursor-pointer"
+            >
+              <X size={18} />
+              Cancelar
             </Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="flex gap-1">
-                <Keyboard size={18} />
-                {editingIndex !== null ? "Editar" : "Digitar"} Lote
-              </DialogTitle>
-            </DialogHeader>
-            <p className="text-base">Número do Lote</p>
-            <Input
-              type="text"
-              placeholder="Digite o lote..."
-              value={loteInput}
-              onChange={(e) => setLoteInput(e.target.value)}
-              className="w-full border p-2 rounded border-gray-200"
-              autoFocus
-            />
-            <p className="text-xs">
-              Digite o número do lote no formato indicado
-            </p>
-            <div className="flex justify-end mt-4">
+            <DialogClose>
               <Button
-                onClick={() => {
-                  setIsModalOpen(false);
-                  setLoteInput("");
-                }}
-                className="bg-gray-400 text-white text-base cursor-pointer"
+                onClick={handleSaveLote}
+                className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
               >
-                <X size={18} />
-                Cancelar
+                <Check size={18} />
+                Confirmar
               </Button>
-              <DialogClose>
-                <Button
-                  onClick={handleSaveLote}
-                  className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
-                >
-                  <Check size={18} />
-                  Confirmar
-                </Button>
-              </DialogClose>
-            </div>
-          </DialogContent>
-        </Dialog>
+            </DialogClose>
+          </div>
+        </DialogContent>
+      </Dialog>
         </div>
-      <div
-        ref={scrollRef}
-        className="overflow-x-auto overflow-y-auto mt-4"
-        style={{ maxHeight: "400px" }}
-      >
-        <table className="min-w-full  border-gray-200">
-          <thead className="sticky bg-gray-100">
-            <tr>
-              <th className="border border-gray-300 px-2 py-1 text-left w-16">SEQ</th>
-              <th className="border border-gray-300 px-2 py-1 text-left min-w-[100px]">
-                LOTE
-              </th>
-              <th className="border border-gray-300 px-2 py-1 text-left w-24">AÇÃO</th>
-            </tr>
-          </thead>
-          <tbody>
-            {lotes.map((item, index) => (
-              <tr key={index} className=" border-gray-300">
-                <td className="border-r border-l border-b border-gray-300 px-2 py-1">{item.seq}</td>
-                <td className="border-r border-b border-gray-300 px-2 py-1 whitespace-nowrap overflow-x-auto max-w-[240px]"onClick={() =>
+        <div
+          ref={scrollRef}
+          className="overflow-x-auto overflow-y-auto mt-4"
+          style={{ maxHeight: "400px" }}
+        >
+          <table className="min-w-full  border-gray-200">
+            <thead className="sticky bg-gray-100">
+              <tr>
+                <th className="border border-gray-300 px-2 py-1 text-left w-16">SEQ</th>
+                <th className="border border-gray-300 px-2 py-1 text-left min-w-[100px]">
+                  LOTE
+                </th>
+                <th className="border border-gray-300 px-2 py-1 text-left w-24">AÇÃO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {lotes.map((item, index) => (
+                <tr key={index} className=" border-gray-300">
+                  <td className="border-r border-l border-b border-gray-300 px-2 py-1">{item.seq}</td>
+                  <td className="border-r border-b border-gray-300 px-2 py-1 whitespace-nowrap overflow-x-auto max-w-[240px]" onClick={() =>
                     setLoteExpandidoIndex(
                       loteExpandidoIndex === index ? null : index
                     )
                   }
-                >
-                  <div className="max-w-[85px] sm:max-w-none overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
-                    {loteExpandidoIndex === index
-                      ? item.lote
-                      : item.lote.length > 8
-                      ? formatarLote(item.lote)
-                      : item.lote}
-                  </div>
-                </td>
-                
-                <td className="border-b border-r border-gray-300 px-2 py-1 flex gap-2">
-                  <Button
-                    onClick={() => handleEditLote(index)}
-                    className="text-yellow-300 hover:bg-[#d4decf] hover:text-yellow-500 cursor-pointer"
-                    disabled={isEncerrado}
                   >
-                    <Pencil size={16} />
-                  </Button>
-                  <Button
-                    onClick={() => handleDeleteLote(index)}
-                    className="text-red-600 hover:bg-[#d4decf] cursor-pointer"
-                    disabled={isEncerrado}
-                  >
-                    <Trash size={16} />
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+                    <div className="max-w-[85px] sm:max-w-none overflow-x-auto whitespace-nowrap scrollbar-thin scrollbar-thumb-gray-500 scrollbar-track-gray-200">
+                      {loteExpandidoIndex === index
+                        ? item.lote
+                        : item.lote.length > 8
+                          ? formatarLote(item.lote)
+                          : item.lote}
+                    </div>
+                  </td>
+
+                  <td className="border-b border-r border-gray-300 px-2 py-1 flex gap-2">
+                    <Button
+                      onClick={() => handleEditLote(index)}
+                      className="text-yellow-400 hover:bg-[#d4decf] hover:text-yellow-500 cursor-pointer"
+                      disabled={isEncerrado}
+                    >
+                      <Pencil size={16} />
+                    </Button>
+                    <Button
+                      onClick={() => handleDeleteLote(index)}
+                      className="text-red-600 hover:bg-[#d4decf] cursor-pointer"
+                      disabled={isEncerrado}
+                    >
+                      <Trash size={16} />
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {!isEncerrado && (
+      {isEncerrado && (
         <div className="flex flex-col gap-4 mt-6">
           <div className="flex flex-col md:flex-row md:items-center gap-2">
             <div className="flex gap-2">
               <Button
                 size={"large"}
                 onClick={() => handleSubmit("A")}
-                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold text-white rounded-lg bg-blue-500 transition-all hover:opacity-75 hover:text-white"
               >
                 <Save size={18} /> SALVAR
               </Button>
               <Button
-                onClick={() => handleSubmit("E")}
+                onClick={() => setOpenModalEncerrar(true)}
                 size={"large"}
-                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] rounded-lg bg-white transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
+                className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold text-white rounded-lg bg-orange-500 transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
               >
                 <Lock size={18} /> ENCERRAR
               </Button>
@@ -569,7 +636,7 @@ function formatarLote(lote: string) {
       <div className="flex items-center justify-center mt-3">
         <Button
           onClick={() => window.print()}
-          className="bg-[#1D4D19] text-white rounded-lg cursor-pointer font-bold print:hidden uppercase text-[16px] mt-8 hover:opacity-75"
+          className="bg-slate-400 text-white rounded-lg cursor-pointer font-bold print:hidden uppercase text-[16px] mt-8 hover:opacity-75"
         >
           <FaPrint />
           Imprimir PDF
