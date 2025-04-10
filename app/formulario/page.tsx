@@ -292,61 +292,142 @@ export default function FormularioCarregamento() {
       </style>
     </head>
     <body>
-      <div style="display: flex;">
-        <img src="/logo-raft.png" style="width: 10rem; height: 4rem;" />
-        <h2 style="margin: 0 auto;">
-          Carregamento
-        </h2>
+    <div style="font-family: Arial, sans-serif; font-size: 10px; max-width: 794px; margin: 0 auto; padding: 24px;">
+    <div style="display: flex; justify-content: space-between;">
+    <div style="display: flex; ">
+      <img src="/logo-raft.png" style="width: 10rem; height: 4rem;" />  
       </div>
-      <div class="grid">
-        <div><strong>OP:</strong> ${formData.items[0]?.ZQ_OP}</div>
-        <div><strong>Nota Fiscal:</strong> ${formData.items[0]?.ZQ_NF}</div>
-        <div><strong>Código FE:</strong> ${formData.items[0]?.ZQ_CODFE}</div>
-        <div><strong>Descrição:</strong> ${formData.items[0]?.ZQ_CODDES}</div>
-        <div><strong>Cliente:</strong> ${formData.items[0]?.ZQ_CLIENTE}</div>
-        <div><strong>Pedido:</strong> ${formData.items[0]?.ZQ_PEDIDO}</div>
-        <div><strong>Quantidade:</strong> ${formData.items[0]?.ZQ_QTDE}</div>
-        <div><strong>Entrega:</strong> ${formData.items[0]?.ZQ_DTENTR}</div>
-        <div><strong>Local Entrega:</strong> ${
-          formData.items[0]?.ZQ_LOCENT
-        }</div>
+      <h2 style="font-size: 16px; font-weight: bold; margin-bottom: 16px; max-width: 10rem; color: #515184; text-align: center; margin-left: 1rem;">FORMULÁRIO DE CARREGAMENTO</h2>
+    <div style="display: flex; flex-direction: column; gap:4px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+      <strong style="color: #515184; font-size: 12px;">Ordem de produçao</strong> <div style="padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> ${formData?.items[0]?.ZQ_OP} </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+      <strong style="color: #515184; font-size: 12px;">Nota fiscal</strong> <div style="padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> ${formData?.items[0]?.ZQ_NF} </div>
+      </div>
+    </div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px; margin-bottom: 10px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Código FE
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${formData?.items[0]?.ZQ_CODFE}
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Descrição 
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${formData?.items[0]?.ZQ_CODDES}
+        </div>
+      </div>
+        <div style="display: flex; flex-direction: column; gap: 4px; grid-column: 1 / -1;">
+            <strong style="color: #515184; font-size: 12px;">
+                Cliente
+            </strong>
+            <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;">
+                ${formData?.items[0]?.ZQ_CLIENTE}
+            </div>
+        </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Pedido 
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${formData?.items[0]?.ZQ_PEDIDO}
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Quantidade 
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${formData?.items[0]?.ZQ_QTDE}
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Entrega 
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${formData?.items[0]?.ZQ_DTENTR}
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Local Entrega 
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${formData?.items[0]?.ZQ_DTENTR?.split('-').reverse().join('/')}
+        </div>
+      </div>
+        <div style="display: flex; flex-direction: column; gap: 4px; grid-column: 1 / -1;">
+            <strong style="color: #515184; font-size: 12px;">
+                Observações
+            </strong>
+            <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; min-height: 4rem;">
+                ${formData?.items[0]?.ZQ_OBS}
+            </div>
+        </div>
       </div>
 
-      <h3>DADOS PARA FATURAMENTO</h3>
-      <div class="grid">
-        <div><strong>Qtd:</strong> ${dadosFaturamento.quantidade}</div>
-        <div><strong>Placa:</strong> ${dadosFaturamento.placa}</div>
-        <div><strong>Transportadora:</strong> ${
-          dadosFaturamento.transportadora
-        }</div>
-        <div><strong>Local Impressão:</strong> ${
-          dadosFaturamento.localImpressao
-        }</div>
+      <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; margin-top: 10px; color: #515184;">DADOS PARA FATURAMENTO</h3>
+      <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+       <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Quantidade
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${dadosFaturamento.quantidade}
+        </div>
       </div>
-      <div style="margin-top: 4px;"><strong>Obs. Faturamento:</strong> ${
-        dadosFaturamento.observacao
-      }</div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Placa
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${dadosFaturamento.placa}
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Transportadora
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${dadosFaturamento.transportadora}
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Local Impressão
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
+          ${dadosFaturamento.localImpressao}
+        </div>
+      </div>
+      </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <strong style="color: #515184; font-size: 12px;">
+          Obs. Faturamento
+        </strong>
+        <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold; min-height: 4rem;"> 
+          ${dadosFaturamento.observacao}
+        </div>
+      </div>
 
-      <h3>CARREGAMENTO</h3>
-      <table>
-        <thead>
-          <tr>
-            <th class="text-center">SEQ</th>
-            <th class="text-center">LOTE</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${lotes
-            .map(
-              (item) => `
-            <tr>
-              <td class="text-center">${item.seq}</td>
-              <td>${item.lote}</td>
-            </tr>`
-            )
-            .join("")}
-        </tbody>
-      </table>
+      <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; margin-top: 10px; color: #515184;">CARREGAMENTO</h3>
+        <div style="border: 1px solid #ccc; min-height: 5rem; display: flex; flex-wrap: wrap; font-size: 14px; padding: 6px;">
+          ${lotes.map(item => `
+            <p>
+            ${item.lote}
+            </p>
+          `).join("")}
+        </div>
+    </div>
     </body>
   </html>
 `);
@@ -786,8 +867,8 @@ export default function FormularioCarregamento() {
                         {loteExpandidoIndex === index
                           ? item.lote
                           : item.lote.length > 8
-                          ? formatarLote(item.lote)
-                          : item.lote}
+                            ? formatarLote(item.lote)
+                            : item.lote}
                       </div>
                     </td>
 
