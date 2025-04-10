@@ -20,18 +20,26 @@ export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
           target: videoRef.current,
           constraints: {
             facingMode: "environment",
+            width: 1280,
+            height: 720
           },
+          singleChannel: false
+        },
+        locator: {
+          halfSample: false,
+          patchSize: "small"
         },
         decoder: {
           readers: [
             "code_128_reader",
-            "ean_reader",
-            "ean_8_reader",
-            "code_39_reader",
           ],
+          multiple: false
         },
+        locate: true,
+        numOfWorkers: 4,
+        frequency: 5
       },
-      (err: string) => {
+      function(err: string) {
         if (err) {
           console.error("Erro ao inicializar Quagga:", err);
           return;

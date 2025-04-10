@@ -423,7 +423,7 @@ export default function FormularioCarregamento() {
         <div style="border: 1px solid #ccc; min-height: 5rem; display: flex; flex-wrap: wrap; font-size: 14px; padding: 6px;">
           ${lotes.map(item => `
             <p>
-            ${item.lote}
+            ${item.lote};
             </p>
           `).join("")}
         </div>
