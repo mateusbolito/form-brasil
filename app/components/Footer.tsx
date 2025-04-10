@@ -11,15 +11,22 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+import { useNavigationHistory } from "../context/navigation-history";
 
 export default function Footer() {
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { goBack } = useNavigationHistory();
+
+  const handleBack = () => {
+    const previousPath = goBack();
+    router.push(previousPath);
+  };
   return (
     <>
       <footer className="fixed bottom-0 w-full bg-[#d4decf] h-20 flex items-center justify-around md:hidden z-50">
-        <button onClick={() => router.back()}>
+        <button onClick={handleBack}>
           <ArrowLeft className="w-8 h-8 text-[#1D4D19] cursor-pointer" />
         </button>
 

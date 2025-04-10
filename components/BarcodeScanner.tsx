@@ -42,6 +42,11 @@ export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const handleDetected = (result: any) => {
       if (result.codeResult.code) {
+        // Evita que o teclado virtual suba
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement.blur();
+        }
+
         onDetected(result.codeResult.code);
         Quagga.stop();
         onClose();
