@@ -6,7 +6,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 
 import { Providers } from "@/providers";
-import { NavigationHistoryProvider } from "./context/navigation-history";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,13 +32,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable}  antialiased`}
       >
-        <NavigationHistoryProvider>
           <Providers>
             <Header />
             <Footer />
             {children}
           </Providers>
-        </NavigationHistoryProvider>
       </body>
     </html>
   );

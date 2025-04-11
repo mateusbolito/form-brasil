@@ -509,17 +509,6 @@ export default function FormularioCarregamento() {
           <div className="flex flex-wrap justify-center sm:justify-end  mt-4 gap-2">
             <Button
               onClick={() => {
-                setModalConfirmation(false);
-                setLoteInput("");
-              }}
-              className="rounded-lg bg-gray-400 text-white text-base cursor-pointer"
-              size={"large"}
-            >
-              <X size={18} />
-              Fechar
-            </Button>
-            <Button
-              onClick={() => {
                 setIsModalOpen(true);
                 setModalConfirmation(false);
               }}
@@ -539,14 +528,25 @@ export default function FormularioCarregamento() {
             >
               <Barcode size={18} /> CARREGAR
             </Button>
+            <Button
+              onClick={() => {
+                setModalConfirmation(false);
+                setLoteInput("");
+              }}
+              className="rounded-lg bg-gray-400 text-white text-base cursor-pointer"
+              size={"large"}
+            >
+              <X size={18} />
+              Fechar
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
-
       <div
+        suppressHydrationWarning
         style={{
           backgroundColor: "#ffffff",
-          color: "#000000",
+          color: "rgb(0, 0, 0)",
           padding: isMobile ? "0px" : "24px",
           borderRadius: "8px",
           boxShadow: isMobile ? "none" : "0 0 10px rgba(0,0,0,0.1)",
