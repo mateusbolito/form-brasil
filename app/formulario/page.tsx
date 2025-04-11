@@ -300,10 +300,14 @@ export default function FormularioCarregamento() {
       <h2 style="font-size: 16px; font-weight: bold; margin-bottom: 16px; max-width: 10rem; color: #515184; text-align: center; margin-left: 1rem;">FORMULÁRIO DE CARREGAMENTO</h2>
     <div style="display: flex; flex-direction: column; gap:4px;">
       <div style="display: flex; flex-direction: column; gap: 4px;">
-      <strong style="color: #515184; font-size: 12px;">Ordem de produçao</strong> <div style="padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> ${formData?.items[0]?.ZQ_OP} </div>
+      <strong style="color: #515184; font-size: 12px;">Ordem de produçao</strong> <div style="padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> ${
+        formData?.items[0]?.ZQ_OP
+      } </div>
       </div>
       <div style="display: flex; flex-direction: column; gap: 4px;">
-      <strong style="color: #515184; font-size: 12px;">Nota fiscal</strong> <div style="padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> ${formData?.items[0]?.ZQ_NF} </div>
+      <strong style="color: #515184; font-size: 12px;">Nota fiscal</strong> <div style="padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> ${
+        formData?.items[0]?.ZQ_NF
+      } </div>
       </div>
     </div>
     </div>
@@ -361,7 +365,7 @@ export default function FormularioCarregamento() {
           Local Entrega 
         </strong>
         <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
-          ${formData?.items[0]?.ZQ_DTENTR?.split('-').reverse().join('/')}
+          ${formData?.items[0]?.ZQ_DTENTR?.split("-").reverse().join("/")}
         </div>
       </div>
         <div style="display: flex; flex-direction: column; gap: 4px; grid-column: 1 / -1;">
@@ -421,11 +425,15 @@ export default function FormularioCarregamento() {
 
       <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; margin-top: 10px; color: #515184;">CARREGAMENTO</h3>
         <div style="border: 1px solid #ccc; min-height: 5rem; display: flex; flex-wrap: wrap; font-size: 14px; padding: 6px;">
-          ${lotes.map(item => `
+          ${lotes
+            .map(
+              (item) => `
             <p>
             ${item.lote};
             </p>
-          `).join("")}
+          `
+            )
+            .join("")}
         </div>
     </div>
     </body>
@@ -498,24 +506,14 @@ export default function FormularioCarregamento() {
             </DialogTitle>
           </DialogHeader>
           <p className="text-base">Deseja inserir um novo lote?</p>
-          <div className="flex justify-end mt-4 gap-2">
-            <Button
-              onClick={() => {
-                setModalConfirmation(false);
-                setLoteInput("");
-              }}
-              className="rounded-lg bg-gray-400 text-white text-base cursor-pointer"
-            >
-              <X size={18} />
-              Fechar
-            </Button>
+          <div className="flex flex-wrap justify-center sm:justify-end  mt-4 gap-2">
             <Button
               onClick={() => {
                 setIsModalOpen(true);
                 setModalConfirmation(false);
               }}
               size={"large"}
-              className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white"
+              className="rounded-lg flex items-center gap-2 cursor-pointer px-6 py-3 font-bold border-2 border-[#1D4D19] text-[#1D4D19] bg-white transition-all hover:bg-[#1D4D19] hover:text-white "
             >
               <Keyboard size={18} />
               DIGITAR
@@ -530,14 +528,25 @@ export default function FormularioCarregamento() {
             >
               <Barcode size={18} /> CARREGAR
             </Button>
+            <Button
+              onClick={() => {
+                setModalConfirmation(false);
+                setLoteInput("");
+              }}
+              className="rounded-lg bg-gray-400 text-white text-base cursor-pointer"
+              size={"large"}
+            >
+              <X size={18} />
+              Fechar
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
-
       <div
+        suppressHydrationWarning
         style={{
           backgroundColor: "#ffffff",
-          color: "#000000",
+          color: "rgb(0, 0, 0)",
           padding: isMobile ? "0px" : "24px",
           borderRadius: "8px",
           boxShadow: isMobile ? "none" : "0 0 10px rgba(0,0,0,0.1)",
@@ -867,8 +876,8 @@ export default function FormularioCarregamento() {
                         {loteExpandidoIndex === index
                           ? item.lote
                           : item.lote.length > 8
-                            ? formatarLote(item.lote)
-                            : item.lote}
+                          ? formatarLote(item.lote)
+                          : item.lote}
                       </div>
                     </td>
 
