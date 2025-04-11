@@ -190,8 +190,9 @@ export default function FormularioCarregamento() {
 
       await postFormularioCarregamento(dadosFormulario);
       toast.success(
-        `Formulário ${status === "A" ? "encerrado" : "salvo"} com sucesso!`
+        `Formulário ${status === "A" ? "salvo" : "encerrado"} com sucesso!`
       );
+      router.push("/")
     } catch {
       toast.error("Erro ao enviar formulário");
     }
@@ -457,7 +458,15 @@ export default function FormularioCarregamento() {
     const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("formulario-carregamento.pdf");
+    const now = new Date();
+    const timestamp = now
+      .toISOString()
+      .replace(/T/, "_")
+      .replace(/:/g, "-")
+      .replace(/\..+/, "");
+    const filename = `formulario-carregamento_${timestamp}.pdf`;
+
+    pdf.save(filename);
 
     document.body.removeChild(iframe);
   };
