@@ -39,6 +39,7 @@ export default function FormularioCarregamento() {
   const [modalConfirmation, setModalConfirmation] = useState(false);
   const [modalEncerrar, setOpenModalEncerrar] = useState(false);
   const [isScannerOpen, setIsScannerOpen] = useState(false);
+  const [isFromScanner, setIsFromScanner] = useState(false);
   const [loteExpandidoIndex, setLoteExpandidoIndex] = useState<number | null>(
     null
   );
@@ -115,6 +116,9 @@ export default function FormularioCarregamento() {
       setLoteInput("");
       setEditingIndex(null);
       setIsModalOpen(false);
+      if(isFromScanner) { 
+        setIsScannerOpen(true);
+      }
     } else {
       setLotes((prev) => {
         const novosLotes = [...prev, { seq: prev.length + 1, lote: loteInput }];
@@ -128,6 +132,12 @@ export default function FormularioCarregamento() {
       });
       setLoteInput("");
       setModalConfirmation(true);
+      setIsFromScanner(false);
+     if(isFromScanner) { 
+        setIsScannerOpen(true);
+        setModalConfirmation(false);
+        setIsFromScanner(false);
+      }
     }
   };
 
@@ -151,6 +161,7 @@ export default function FormularioCarregamento() {
     setLoteInput(code);
     setIsScannerOpen(false);
     setIsModalOpen(true);
+    setIsFromScanner(true);
   };
 
   const handleInputChange = (
@@ -189,10 +200,36 @@ export default function FormularioCarregamento() {
       };
 
       await postFormularioCarregamento(dadosFormulario);
-      toast.success(
+
+     const updatedFormData = {
+      ...formData,
+      items: formData.items.map((oldItem, index) => {
+        if (index === 0) {
+          return {
+            ...oldItem,
+            FORMULARIO: [
+              {
+                ...(oldItem.FORMULARIO?.[0] || {}),
+                ZP_QTDECAR: dadosFormulario.ZP_QTDECAR.toString(),
+                ZP_PLACA: dadosFormulario.ZP_PLACA,
+                ZP_TRANSP: dadosFormulario.ZP_TRANSP,
+                ZP_LOCIMP: dadosFormulario.ZP_LOCIMP,
+                ZP_OBS: dadosFormulario.ZP_OBS,
+                ZP_STATUS: status === "A" ? "Ativo" : "Encerrado",
+                LOTES: [...dadosFormulario.ZP_LOTE],
+              },
+            ],
+          };
+        }
+        return oldItem;
+      }),
+    };
+
+    localStorage.setItem("formularioData", JSON.stringify(updatedFormData));
+
+    toast.success(
         `Formulário ${status === "A" ? "salvo" : "encerrado"} com sucesso!`
       );
-      router.push("/")
     } catch {
       toast.error("Erro ao enviar formulário");
     }
@@ -358,7 +395,7 @@ export default function FormularioCarregamento() {
           Entrega 
         </strong>
         <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
-          ${formData?.items[0]?.ZQ_DTENTR}
+          ${formData?.items[0]?.ZQ_DTENTR?.split("-").reverse().join("/")}
         </div>
       </div>
       <div style="display: flex; flex-direction: column; gap: 4px;">
@@ -366,7 +403,7 @@ export default function FormularioCarregamento() {
           Local Entrega 
         </strong>
         <div style="min-height: 27px; padding: 2px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; font-weight: bold;"> 
-          ${formData?.items[0]?.ZQ_DTENTR?.split("-").reverse().join("/")}
+          ${formData?.items[0]?.ZQ_LOCENT}
         </div>
       </div>
         <div style="display: flex; flex-direction: column; gap: 4px; grid-column: 1 / -1;">
@@ -424,13 +461,13 @@ export default function FormularioCarregamento() {
         </div>
       </div>
 
-      <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; margin-top: 10px; color: #515184;">CARREGAMENTO</h3>
+      <h3 style="font-size: 16px; font-weight: bold; margin-bottom: 10px; text-align: center; margin-top: 10px; color: #515184;">LOTES CARREGADOS</h3>
         <div style="border: 1px solid #ccc; min-height: 5rem; display: flex; flex-wrap: wrap; font-size: 14px; padding: 6px;">
           ${lotes
             .map(
               (item) => `
-            <p>
-            ${item.lote};
+            <p style="margin-right: 0.5rem;">
+            ${item.lote} |
             </p>
           `
             )
@@ -780,7 +817,7 @@ export default function FormularioCarregamento() {
           />
         </div>
 
-        <h2 className="flex text-3xl font-bold mb-4 mt-7">Carregamento </h2>
+        <h2 className="flex text-3xl font-bold mb-4 mt-7">Lotes Carregados </h2>
         <span className="border-t-2 flex border-t-gray-100"></span>
         <div className="w-full mt-4">
           <div className="flex gap-2">
@@ -927,7 +964,7 @@ export default function FormularioCarregamento() {
                 <Button
                   onClick={() => setOpenModalEncerrar(true)}
                   size={"large"}
-                  className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold text-white rounded-lg bg-orange-500 transition-all hover:bg-[#1D4D19] hover:text-white print:hidden"
+                  className="flex items-center gap-2 cursor-pointer px-6 py-3 font-bold text-white rounded-lg bg-orange-500 transition-all hover:opacity-75 hover:text-white print:hidden"
                 >
                   <Lock size={18} /> ENCERRAR
                 </Button>
@@ -951,6 +988,7 @@ export default function FormularioCarregamento() {
         <BarcodeScanner
           onDetected={handleBarcodeDetected}
           onClose={() => setIsScannerOpen(false)}
+          setModalOpen={() => { setIsModalOpen(true); setIsScannerOpen(false); }}
         />
       )}
     </div>

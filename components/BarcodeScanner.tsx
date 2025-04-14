@@ -4,9 +4,10 @@ import Quagga from "@ericblade/quagga2";
 interface BarcodeScannerProps {
   onDetected: (code: string) => void;
   onClose: () => void;
+  setModalOpen: () => void;
 }
 
-export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
+export function BarcodeScanner({ onDetected, onClose, setModalOpen }: BarcodeScannerProps) {
   const videoRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -69,14 +70,22 @@ export function BarcodeScanner({ onDetected, onClose }: BarcodeScannerProps) {
     };
   }, [onDetected, onClose]);
 
+  
+
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 ">
       <div className="bg-white p-4 rounded-lg w-full max-w-lg">
         <div className="flex justify-between items-center mb-4">
+           <button
+            onClick={setModalOpen}
+            className="text-blue-500 hover:text-blue-700 border p-2 rounded-2xl font-bold text-sm cursor-pointer"
+          >
+            Digitar
+          </button>
           <h3 className="text-lg font-semibold">Escaneie o código de barras</h3>
           <button
             onClick={onClose}
-            className="text-gray-500 hover:text-gray-700"
+            className="text-blue-500 hover:text-blue-700 border p-2 rounded-2xl font-bold text-sm cursor-pointer"
           >
             Fechar
           </button>

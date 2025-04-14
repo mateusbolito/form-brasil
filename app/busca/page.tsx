@@ -155,6 +155,7 @@ export default function BuscaPvOp() {
               setIsScannerOpenOP(false);
             }}
             onClose={() => setIsScannerOpenOP(false)}
+            setModalOpen={() => setIsScannerOpenOP(false)}
           />
         )}
 
@@ -165,6 +166,7 @@ export default function BuscaPvOp() {
               setIsScannerOpenPV(false);
             }}
             onClose={() => setIsScannerOpenPV(false)}
+            setModalOpen={() => setIsScannerOpenOP(false)}
           />
         )}
       </main>
