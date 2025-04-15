@@ -226,10 +226,14 @@ export default function FormularioCarregamento() {
     };
 
     localStorage.setItem("formularioData", JSON.stringify(updatedFormData));
-
     toast.success(
-        `Formulário ${status === "A" ? "salvo" : "encerrado"} com sucesso!`
-      );
+      `Formulário ${status === "A" ? "salvo" : "encerrado"} com sucesso!`
+    );
+
+    if(status === "E") {
+      router.refresh();
+    } 
+
     } catch {
       toast.error("Erro ao enviar formulário");
     }
@@ -534,6 +538,7 @@ export default function FormularioCarregamento() {
             <Button
               onClick={() => {
                 handleSubmit("E");
+                setOpenModalEncerrar(false);
               }}
               className="bg-blue-500 text-white ml-2 cursor-pointer hover:opacity-40 text-base"
             >
